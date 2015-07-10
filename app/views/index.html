@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en" ng-app="xtv">
+<head>
+    <base href="/">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+
+    <title>XTV</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/lib/bootstrap-material-design/dist/css/ripples.min.css" rel="stylesheet">
+    <link href="/assets/lib/bootstrap-material-design/dist/css/material-wfont.min.css" rel="stylesheet">
+    <link href="/assets/css/xtv.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="message-box message-box-animate" ng-show="message.text">
+    <div class="text-center message-box-text" ng-click="hideMessage()">
+        <strong>{{message.text}}</strong>
+    </div>
+</div>
+
+<div class="navbar navbar-default navbar-fixed-top navbar-material-bluegrey" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#/home">XTV</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                   <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                     <span class="mdi-av-movie"></span> Shows <span class="caret"></span>
+                    </a>
+                   <ul class="dropdown-menu" role="menu">
+                     <li><a href="#/shows">My Shows</a></li>
+                     <li><a href="#/shows_recent"></span>Recent Episodes</a></li>
+                   </ul>
+                 </li>
+
+
+
+                <li><a href="#/search"><span class="mdi-action-search"></span> Search</a></li>
+                <li><a href="#/downloads"><span class="mdi-file-file-download"></span> Downloads</a></li>
+                <li><a ng-click="showSettingsDialog()"><span class="mdi-action-settings"></span> Settings</a></li>
+                <li><a href="#/logFile"><span class="glyphicon glyphicon-list-alt"></span> Log</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</div>
+
+<div class="container">
+    <div ng-view></div>
+</div><!-- /.container -->
+
+<!-- Settings Modal -->
+<div ng-controller="SettingsCtrl">
+    <div class="modal fade" id="settingsDialog" tabindex="-1" role="dialog" aria-labelledby="settingsDialogLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="settingsDialogLabel"><span class="glyphicon glyphicon-cog"></span> Settings</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" name="settingsForm">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nick">IRC Nickname</label>
+                                    <input type="text" class="form-control" id="nick" placeholder="IRC Nickname" ng-model="settings.nick" required>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="maxDownStream">max DownStream</label>
+                                    <input type="number" class="form-control" id="maxDownStream" placeholder="Maximum Downstream for all Downloads" ng-model="settings.maxDownStream" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tempDir">Temp-Dir</label>
+                            <input type="text" class="form-control" id="tempDir" placeholder="Temporary Download Directory" ng-model="settings.tempDir" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="downloadDir">Download-Dir</label>
+                            <input type="text" class="form-control" id="downloadDir" placeholder="Download Directory" ng-model="settings.downloadDir" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="showsFolder">Shows Folder</label>
+                          <input type="text" class="form-control" id="showsFolder" placeholder="Shows Folder" ng-model="settings.showsFolder">
+                        </div>
+                        <div class="form-group">
+                          <label for="moviesFolder">Movies Folder</label>
+                          <input type="text" class="form-control" id="moviesFolder" placeholder="Movies Folder" ng-model="settings.moviesFolder">
+                        </div>
+                        <div class="form-group">
+                          <label for="kodiAddress">Kodi Adress</label>
+                          <input type="text" class="form-control" id="kodiAddress" placeholder="192.168.1.44:9090" ng-model="settings.kodiAddress">
+                        </div>
+                        <div class="form-group">
+                          <label for="traktToken">Trakt Token</label>
+                          <input type="text" class="form-control" id="traktToken" ng-model="settings.traktToken">
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-material-bluegrey" ng-disabled="settingsForm.$invalid" ng-click="saveSettings()">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="/assets/lib/jquery/dist/jquery.min.js"></script>
+<script src="/assets/lib/underscore/underscore.js"></script>
+<script src="/assets/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/assets/lib/bootstrap-material-design/dist/js/ripples.min.js"></script>
+<script src="/assets/lib/bootstrap-material-design/dist/js/material.min.js"></script>
+<!-- In production use:
+ <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+ -->
+<script src="/assets/lib/angular/angular.js"></script>
+<script src="/assets/lib/angular-route/angular-route.min.js"></script>
+<script src="/assets/lib/angular-animate/angular-animate.min.js"></script>
+
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/services/messageService.js"></script>
+<script src="/assets/js/controllers/HomeCtrl.js"></script>
+<script src="/assets/js/controllers/ShowsCtrl.js"></script>
+<script src="/assets/js/controllers/ShowsRecentCtrl.js"></script>
+<script src="/assets/js/controllers/SearchCtrl.js"></script>
+<script src="/assets/js/controllers/DownloadsCtrl.js"></script>
+<script src="/assets/js/controllers/SettingsCtrl.js"></script>
+<script src="/assets/js/controllers/LogFileCtrl.js"></script>
+<script src="/assets/js/filters.js"></script>
+<script src="/assets/js/directives.js"></script>
+
+</body>
+</html>

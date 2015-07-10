@@ -1,0 +1,129 @@
+<div class="xtv-home">
+    <h1>XTV</h1>
+    <p class="lead">XDCC for Servers</p>
+</div>
+
+<div class="row">
+    <div class="col-sm-5">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="pull-left xtv-row-heading">Servers</h3>
+                <a class="btn btn-default btn-xs pull-right pointer" ng-click="showAddServerDialog()">
+                    <span class="glyphicon glyphicon-plus"></span> Add Server
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12  list-group">
+              <div ng-repeat="server in servers | orderBy: 'name'">
+                <div  class="list-group-item" ng-class="{active: server==selectedServer}" ng-click="selectServer(server)">
+                    <div class="row-action-primary">
+                        <i title="{{server.status}}" class="pointer" ng-class="getStatusClass(server)" ng-click="toggleConnection (server)"></i>
+                    </div>
+                    <div class="row-content">
+                      <div class="action-secondary" >
+                        <i title="delete Server" ng-click="showDeleteServerConfirm (server)" class="mdi-action-delete"></i>
+                      </div>
+                      <p class="list-group-item-heading">{{server.name}}</p>
+                      <p class="list-group-item-text">Port: {{server.port}}</p>
+                    </div>
+                </div>
+                <div class="list-group-separator"></div>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-7" ng-show="selectedServer">
+        <div class="row">
+            <div class="col-sm-12">
+              <h5 class="pull-left" style="margin-top:18px">Channels ({{selectedServer.name}}):</h5>
+              <a class="btn btn-default btn-xs pull-right pointer" ng-click="showAddChannelDialog()">
+                  <span class="glyphicon glyphicon-plus"></span> Add Channel
+              </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 list-group">
+              <div ng-repeat="channel in selectedServer.channels  | orderBy: 'name'">
+                <div  class="list-group-item" ng-class="{active: channel==selectedChannel}" ng-click="selectChannel(channel)">
+                    <div class="row-content" style="min-height: 20px;">
+                      <div class="action-secondary" style="top: 0">
+                        <i title="delete Channel" ng-click="showDeleteChannelConfirm (channel)" class="mdi-action-delete"></i>
+                      </div>
+                      <p class="list-group-item-text">{{channel.name}}</p>
+                    </div>
+                </div>
+                <div class="list-group-separator xtv-seperator-full"></div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-show="selectedServerConsole">
+   <textarea class="col-sm-12" style="height: 250px;" ng-model="selectedServerConsole"></textarea>
+</div>
+
+
+<!-- AddServer Modal -->
+<div class="modal fade" id="addServerDialog" tabindex="-1" role="dialog" aria-labelledby="addServerDialogLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="addServerDialogLabel"><span class="glyphicon glyphicon-cog"></span> Add Server</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" name="addServerForm">
+                    <div class="form-group">
+                        <label for="uri">URI:</label>
+                        <input type="text" class="form-control" id="uri" placeholder="Server-URI" ng-model="newServer.uri" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="port">Port:</label>
+                        <input type="number" class="form-control" id="port" placeholder="Download Directory" ng-model="newServer.port" required>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-material-bluegrey" ng-disabled="addServerForm.$invalid" ng-click="addServer()">Add Server</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AddChannel Modal -->
+<div class="modal fade" id="addChannelDialog" tabindex="-1" role="dialog" aria-labelledby="addChannelDialogLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="addChannelDialogLabel"><span class="glyphicon glyphicon-cog"></span> Add Channel</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" name="addChannelForm">
+                    <div class="form-group">
+                        <label for="channelName">Name:</label>
+                        <input type="text" class="form-control" id="channelName" placeholder="Channel-Name" ng-model="newChannel.name" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-material-bluegrey" ng-disabled="addChannelForm.$invalid" ng-click="addChannel()">Add Channel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Server Confirm Modal -->
+<confirm-dialog confirm="deleteServer()" id="deleteServerConfirmDialog">
+    Do you really want to delete the server '{{serverToDelete.name}}'?
+</confirm-dialog>
+
+<!-- Delete Channel Confirm Modal -->
+<confirm-dialog confirm="deleteChannel()" id="deleteChannelConfirmDialog">
+    Do you really want to delete the channel '{{channelToDelete.name}}'?
+</confirm-dialog>

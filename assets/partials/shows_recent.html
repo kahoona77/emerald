@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col-sm-offset-3 col-sm-6 text-center">
+        <h2>Recent Episodes</h2>
+    </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12  list-group">
+    <div ng-repeat="it in episodes | orderBy: 'first_aired' : true">
+      <div  class="list-group-item">
+          <div class="row-action-primary">
+              <img style="width: 75px; height: initial;" ng-src="{{it.show.images.poster.thumb}}">
+          </div>
+          <div class="row-content">
+            <p class="list-group-item-heading"><strong>{{it.show.title}} - ({{it.episode.season}}x{{it.episode.number}})</strong> </p>
+            <p class="list-group-item-text"><strong>{{it.episode.title}}</strong> {{it.first_aired | date : 'dd.MM.yyyy' }}</p>
+            <p class="list-group-item-text">{{it.episode.overview}}</p>
+            <div class="action-secondary" >
+              <a ng-click="searchEpisode (it.show, it.episode)" class="btn btn-success  btn-material-lightgreen xtv-download-btn mdi-action-search"></a>
+              <!-- <i title="search episode" style="margin-top: 50px;" ng-click="searchEpisode (it.show, it.episode)" class="mdi-action-search"></i> -->
+            </div>
+          </div>
+      </div>
+      <div class="list-group-separator"></div>
+    </div>
+  </div>
+</div>

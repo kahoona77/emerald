@@ -1,0 +1,162 @@
+<div class="row">
+    <div class="col-sm-offset-3 col-sm-6 text-center">
+        <h2>Shows</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="pull-left xtv-row-heading">Shows</h3>
+                <a class="btn btn-default btn-xs pull-right pointer" ng-click="showAddShowDialog()">
+                    <span class="glyphicon glyphicon-plus"></span> Add Show
+                </a>
+            </div>
+        </div>
+        <div class="row xtv-shows-container">
+          <div class="col-sm-12  list-group">
+            <div ng-repeat="show in shows | orderBy: 'name'">
+              <div  class="list-group-item" ng-class="{active: show==selectedShow}" ng-click="selectShow(show)">
+                  <div class="row-action-primary">
+                      <i class="mdi-av-movie"></i>
+                  </div>
+                  <div class="row-content">
+                    <div class="action-secondary" >
+                      <i title="delete Show" ng-click="showDeleteShowConfirm (show)" class="mdi-action-delete"></i>
+                    </div>
+                    <p class="list-group-item-heading">{{show.name}}</p>
+                    <p class="list-group-item-text">{{show.firstAired}}</p>
+                  </div>
+              </div>
+              <div class="list-group-separator"></div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="col-sm-8 panel panel-default" ng-show="selectedShow">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-12 well">
+            <div class="row">
+              <div class="col-sm-12">
+                <img ng-src="http://thetvdb.com/banners/{{selectedShow.banner}}" class="col-sm-12"/>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <p style="padding-top: 15px;">{{selectedShow.overview}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <form role="form" name="editShowForm">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" placeholder="Name" ng-model="selectedShow.name" required disabled>
+                </div>
+                <div class="form-group">
+                    <label for="tvbdID">TvbdID:</label>
+                    <input type="text" class="form-control" id="tvbdID" placeholder="TvbdID" ng-model="selectedShow.id" required disabled>
+                </div>
+                <div class="form-group">
+                    <label for="searchName">Search Name:</label>
+                    <input type="text" class="form-control" id="searchName" placeholder="Search Name" ng-model="selectedShow.searchName" required>
+                </div>
+                <div class="form-group">
+                    <label for="folder">Folder:</label>
+                    <input type="text" class="form-control" id="folder" placeholder="Folder" ng-model="selectedShow.folder" required>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <button type="button" class="btn btn-default pull-right" ng-click="saveShow(selectedShow)">Save</button>
+                        <button type="button" class="btn btn-default pull-right" ng-click="loadEpisodes(selectedShow)">Load Episodes</button>
+                    </div>
+                </div>
+            </form>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+</div>
+
+<!-- AddShow Modal -->
+<div class="modal fade" id="addShowDialog" tabindex="-1" role="dialog" aria-labelledby="addShowDialogLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="addShowDialogLabel"><span class="glyphicon glyphicon-cog"></span> Add Show</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" name="addShowForm">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Showname" ng-model="query">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit" ng-click="searchShow()"><span class="glyphicon glyphicon-search"></span> Search</button>
+                        </span>
+                    </div>
+                </form>
+                <table class="table" style="display: block; max-height: 450px; overflow-y: scroll">
+                    <tr ng-repeat="result in searchResults">
+                        <td>
+                          {{result.name}} ({{result.firstAired}})
+                          <p><small>{{result.overview}}</small></p>
+                          </td>
+                        <td>
+                            <a ng-click="saveShow(result)" class="btn btn-default btn-fab btn-raised btn-material-bluegrey mdi-content-add"></span></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Episodes Modal -->
+<div class="modal fade" id="episodesDialog" tabindex="-1" role="dialog" aria-labelledby="episodesDialogLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="episodesDialogLabel"><span class="glyphicon glyphicon-cog"></span> Episodes for {{selectedShow.name}}</h4>
+            </div>
+            <div class="modal-body" style="max-height: 500px; overflow-y: scroll">
+              <div ng-repeat="season in seasons">
+                <table class="table" >
+                    <tr ng-repeat="episode in season.episodes">
+                        <td>{{episode.seasonNumber}} x {{episode.episodeNumber}}</td>
+                        <td>{{episode.firstAired}}</td>
+                        <td><a ng-click="searchEpisode(selectedShow, episode)"><i class="mdi-action-search"></i></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Show Confirm Modal -->
+<confirm-dialog confirm="deleteShow()" id="deleteShowConfirmDialog">
+    Do you really want to delete the show '{{showToDelete.name}}'?
+</confirm-dialog>

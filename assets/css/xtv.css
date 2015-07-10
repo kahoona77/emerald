@@ -1,0 +1,115 @@
+body {
+    padding-top: 60px;
+}
+
+a {
+    cursor: pointer;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.xtv-home {
+  text-align: center;
+}
+
+.list-group-item.active {
+  border-left: solid rgb(119, 119, 119);
+}
+
+.list-group-separator.xtv-seperator-full:before {
+  width: calc(100% - 10px);
+}
+
+.xtv-server-icon {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.xtv-row-heading {
+  margin-top: 12px;
+}
+
+.xtv-search-filed {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.xtv-download-btn {
+  margin: 0;
+  padding: 6px;
+  font-size: 14px;
+  width: 25px;
+  height: 25px;
+}
+
+.xtv-shows-container {
+  max-height: 600px;
+  overflow-y: scroll;
+}
+
+
+.xtv-progress {
+  margin-bottom: 0;
+}
+
+.xtv-download-link:hover {
+  color: #004c00;
+}
+
+.xtv-confirm-dialog .modal-header{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.xtv-confirm-dialog .modal-body{
+  padding-bottom: 10px;
+}
+
+.xtv-confirm-dialog .modal-footer{
+  margin-top: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* +++++++++++++++ Message-Box +++++++++++++++++++++++++ */
+
+.message-box {
+  position: fixed;
+  z-index: 1040;
+  width: 600px;
+  top:0;
+  left: 50%;
+  margin-left: -300px;
+  cursor: pointer;
+}
+
+.message-box-text {
+  background-color: #202020;
+  opacity: 0.8;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.message-box-animate {
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -o-transition: all 0.3s;
+}
+
+.message-box-animate.ng-hide.ng-hide-add,
+.message-box-animate.ng-hide.ng-hide-remove.ng-hide-remove-active {
+  display:block!important;
+  top: 0;
+}
+
+
+.message-box-animate.ng-hide.ng-hide-add.ng-hide-add-active,
+.message-box-animate.ng-hide.ng-hide-remove{
+  display:block!important;
+  top: -200px;
+}
