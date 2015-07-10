@@ -74,13 +74,14 @@ func (this *XtvSettings) SetId(id string) {
 
 //Show
 type Show struct {
-	Id         string `json:"id" bson:"_id"`
-	Name       string `json:"name" bson:"name"`
-	Banner     string `json:"banner" bson:"banner"`
-	FirstAired string `json:"firstAired" bson:"firstAired"`
-	Overview   string `json:"overview" bson:"overview"`
-	SearchName string `json:"searchName" bson:"searchName"`
-	Folder     string `json:"folder" bson:"folder"`
+	Id         string    `json:"id" bson:"_id"`
+	Name       string    `json:"name" bson:"name"`
+	Banner     string    `json:"banner" bson:"banner"`
+	Poster     string    `json:"poster" bson:"poster"`
+	FirstAired time.Time `json:"firstAired" bson:"firstAired"`
+	Overview   string    `json:"overview" bson:"overview"`
+	SearchName string    `json:"searchName" bson:"searchName"`
+	Folder     string    `json:"folder" bson:"folder"`
 }
 
 func (this *Show) SetId(id string) {
@@ -89,15 +90,22 @@ func (this *Show) SetId(id string) {
 
 //Episode
 type Episode struct {
-	ID            string `json:"id" bson:"_id"`
-	Name          string `json:"name" bson:"name"`
-	FirstAired    string `json:"firstAired" bson:"firstAired"`
-	Overview      string `json:"overview" bson:"overview"`
-	Filename      string `json:"filename" bson:"filename"`
-	EpisodeNumber uint64 `json:"episodeNumber" bson:"episodeNumber"`
-	SeasonNumber  uint64 `json:"seasonNumber" bson:"seasonNumber"`
+	Id            string    `json:"id" bson:"_id"`
+	ShowId        string    `json:"shpwId" bson:"showId"`
+	Name          string    `json:"name" bson:"name"`
+	FirstAired    time.Time `json:"firstAired" bson:"firstAired"`
+	Overview      string    `json:"overview" bson:"overview"`
+	Filename      string    `json:"filename" bson:"filename"`
+	EpisodeNumber uint64    `json:"episodeNumber" bson:"episodeNumber"`
+	SeasonNumber  uint64    `json:"seasonNumber" bson:"seasonNumber"`
 }
 
 func (this *Episode) SetId(id string) {
-	this.ID = id
+	this.Id = id
+}
+
+//RecentEpisode
+type RecentEpisode struct {
+	Episode Episode `json:"episode"`
+	Show    Show    `json:"show"`
 }

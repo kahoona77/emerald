@@ -10,9 +10,9 @@ angular.module('xtv.controllers').
     $scope.searchResults = undefined;
 
     $scope.search = function () {
-      $http.get('packets/findPackets', {params : {query: $scope.query}}).success(function(response){
-        if (response.status == 'ok') {
-          $scope.searchResults = response.packets;
+      $http.get('data/findPackets', {params : {query: $scope.query}}).success(function(response){
+        if (response.success) {
+          $scope.searchResults = response.data;
         } else {
           msg.error (response.message);
         }
@@ -20,9 +20,9 @@ angular.module('xtv.controllers').
     };
 
     $scope.countPackets = function () {
-      $http.get('packets/countPackets').success(function(response){
-        if (response.status == 'ok') {
-          $scope.packetCount = response.count;
+      $http.get('data/countPackets').success(function(response){
+        if (response.success) {
+          $scope.packetCount = response.data;
         } else {
           msg.error (response.message);
         }

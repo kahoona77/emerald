@@ -7,8 +7,8 @@ angular.module('xtv.controllers').
 
     $scope.loadShows = function () {
       $http.get('/shows/load').success(function(response){
-        if (response.status == 'ok') {
-          $scope.shows = response.shows;
+        if (response.success) {
+          $scope.shows = response.data;
 
           //reselect server
           angular.forEach ($scope.shows, function (show) {
@@ -29,8 +29,8 @@ angular.module('xtv.controllers').
     $scope.searchShow = function () {
 
       $http.get('/shows/search', {params : {query: $scope.query}}).success(function(response){
-        if (response.status == 'ok') {
-          $scope.searchResults = response.shows;
+        if (response.success) {
+          $scope.searchResults = response.data;
         } else {
           msg.error (response.message);
         }
@@ -46,7 +46,7 @@ angular.module('xtv.controllers').
     };
 
     $scope.saveShow = function (show) {
-      $http.post ('/shows/save', {data: show}).success (function (response) {
+      $http.post ('/shows/save', show).success (function (response) {
         if (response.status = 'ok') {
           $('#addShowDialog').modal('hide');
           $scope.query = undefined;
@@ -63,8 +63,8 @@ angular.module('xtv.controllers').
     };
 
     $scope.deleteShow = function () {
-      $http.post ('shows/delete', {data: $scope.showToDelete}).success (function (response) {
-        if (response.status = 'ok') {
+      $http.post ('shows/delete', $scope.showToDelete).success (function (response) {
+        if (response.success) {
           $('#deleteShowConfirmDialog').modal('hide');
           $scope.showToDelete = undefined;
           $scope.selectedShow = undefined;
@@ -78,9 +78,9 @@ angular.module('xtv.controllers').
 
     $scope.loadEpisodes = function (show) {
      $http.get('/shows/loadEpisodes', {params : {showId: show.id}}).success(function(response){
-        if (response.status == 'ok') {
+        if (response.success) {
           var result = [];
-          angular.forEach(response.episodes, function(value, key) {
+          angular.forEach(response.data, function(value, key) {
             this.push({seasonNumber: key, episodes: value});
           }, result);
           $scope.seasons = result;

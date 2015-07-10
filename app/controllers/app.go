@@ -26,6 +26,14 @@ func renderOk(c *revel.Controller, data interface{}) revel.Result {
 	return c.RenderJson(result)
 }
 
+func renderErrorMsg(c *revel.Controller, msg string) revel.Result {
+	return c.RenderJson(ERROR(msg))
+}
+
+func renderError(c *revel.Controller, err error) revel.Result {
+	return c.RenderJson(ERROR(err.Error()))
+}
+
 type App struct {
 	*revel.Controller
 }

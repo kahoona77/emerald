@@ -26,7 +26,7 @@
                       <i title="delete Show" ng-click="showDeleteShowConfirm (show)" class="mdi-action-delete"></i>
                     </div>
                     <p class="list-group-item-heading">{{show.name}}</p>
-                    <p class="list-group-item-text">{{show.firstAired}}</p>
+                    <p class="list-group-item-text">{{show.firstAired | date: 'yyyy-MM-dd'}}</p>
                   </div>
               </div>
               <div class="list-group-separator"></div>
@@ -111,7 +111,7 @@
                 <table class="table" style="display: block; max-height: 450px; overflow-y: scroll">
                     <tr ng-repeat="result in searchResults">
                         <td>
-                          {{result.name}} ({{result.firstAired}})
+                          {{result.name}} ({{result.firstAired | date: 'yyyy-MM-dd'}})
                           <p><small>{{result.overview}}</small></p>
                           </td>
                         <td>
@@ -141,7 +141,8 @@
                 <table class="table" >
                     <tr ng-repeat="episode in season.episodes">
                         <td>{{episode.seasonNumber}} x {{episode.episodeNumber}}</td>
-                        <td>{{episode.firstAired}}</td>
+                        <td>{{episode.firstAired | date: 'yyyy-MM-dd'}}</td>
+                        <td>{{episode.name}}</td>
                         <td><a ng-click="searchEpisode(selectedShow, episode)"><i class="mdi-action-search"></i></a></td>
                     </tr>
                     </tbody>

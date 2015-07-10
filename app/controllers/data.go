@@ -51,3 +51,20 @@ func (c Data) SaveSettings() revel.Result {
 	dataService.SaveSettings(&settings)
 	return c.RenderJson(OK())
 }
+
+func (c Data) FindPackets() revel.Result {
+	var query = c.Params.Get("query")
+	packtes, err := dataService.FindPackets(query)
+	if err != nil {
+		return renderError(c.Controller, err)
+	}
+	return renderOk(c.Controller, packtes)
+}
+
+func (c Data) CountPackets() revel.Result {
+	deletedPacktes, _ := dataService.DeleteOldPackets()
+	revel.INFO.Printf("Deleted %v packets", deletedPacktes)
+
+	packetCount, _ := dataService.CountPackets()
+	return renderOk(c.Controller, packetCount)
+}

@@ -55,6 +55,67 @@ func (_ tData) SaveSettings(
 	return revel.MainRouter.Reverse("Data.SaveSettings", args).Url
 }
 
+func (_ tData) FindPackets(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Data.FindPackets", args).Url
+}
+
+func (_ tData) CountPackets(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Data.CountPackets", args).Url
+}
+
+
+type tShows struct {}
+var Shows tShows
+
+
+func (_ tShows) Load(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Shows.Load", args).Url
+}
+
+func (_ tShows) Save(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Shows.Save", args).Url
+}
+
+func (_ tShows) Delete(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Shows.Delete", args).Url
+}
+
+func (_ tShows) Search(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Shows.Search", args).Url
+}
+
+func (_ tShows) LoadEpisodes(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Shows.LoadEpisodes", args).Url
+}
+
+func (_ tShows) RecentEpisodes(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Shows.RecentEpisodes", args).Url
+}
+
 
 type tTestRunner struct {}
 var TestRunner tTestRunner
