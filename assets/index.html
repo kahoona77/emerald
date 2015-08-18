@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" ng-app="xtv">
 <head>
@@ -23,7 +22,7 @@
 
 <div class="message-box message-box-animate" ng-show="message.text">
     <div class="text-center message-box-text" ng-click="hideMessage()">
-        <strong>{{message.text}}</strong>
+        <strong ng-bind="message.text"></strong>
     </div>
 </div>
 

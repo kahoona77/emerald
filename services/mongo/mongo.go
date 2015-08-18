@@ -1,8 +1,9 @@
 package mongo
 
 import (
-	"github.com/kahoona77/emerald/app/models"
-	"github.com/revel/revel"
+	"log"
+
+	"github.com/kahoona77/emerald/models"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
 )
@@ -15,9 +16,9 @@ func InitDB() {
 	var err error
 	mongoSession, err = mgo.Dial("localhost") //mgo.Dial("192.168.56.101") //mgo.Dial("localhost")
 	if err != nil {
-		revel.INFO.Println("DB Error", err)
+		log.Printf("DB Error", err)
 	} else {
-		revel.INFO.Println("DB Connected")
+		log.Printf("DB Connected")
 	}
 }
 

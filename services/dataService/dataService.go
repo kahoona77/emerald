@@ -4,8 +4,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kahoona77/emerald/app/models"
-	"github.com/kahoona77/emerald/app/services/mongo"
+	"github.com/kahoona77/emerald/models"
+	"github.com/kahoona77/emerald/services/mongo"
 	"labix.org/v2/mgo/bson"
 )
 

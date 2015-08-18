@@ -5,8 +5,8 @@ import (
 	"time"
 
 	tvdb "github.com/garfunkel/go-tvdb"
-	"github.com/kahoona77/emerald/app/models"
-	"github.com/kahoona77/emerald/app/services/mongo"
+	"github.com/kahoona77/emerald/models"
+	"github.com/kahoona77/emerald/services/mongo"
 )
 
 const SHOWS_REPO = "shows"
