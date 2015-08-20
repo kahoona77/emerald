@@ -3,33 +3,31 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/kahoona77/emerald/models"
+	"github.com/kahoona77/emerald/services/dataService"
 	"github.com/kahoona77/emerald/services/showsService"
 )
 
 // ShowsController Creates all routes for the ShowsController
-func ShowsController(router *gin.RouterGroup) {
-	router.GET("/load", load)
-	router.POST("/save", save)
-	router.POST("/delete", delete)
-	router.GET("/search", search)
-	router.GET("/loadEpisodes", loadEpisodes)
-	router.GET("/recentEpisodes", recentEpisodes)
-
+type ShowsController struct {
+	ShowsService *showsService.ShowsService `inject:""`
+	DataService  *dataService.DataService   `inject:""`
 }
 
-func load(c *gin.Context) {
-	shows, err := showsService.FindAllShows()
+//Load loads all shows
+func (sc *ShowsController) Load(c *gin.Context) {
+	shows, err := sc.ShowsService.FindAllShows()
 	if err != nil {
 		renderError(c, err)
 	}
 	renderOk(c, shows)
 }
 
-func save(c *gin.Context) {
+//Save saves the given show
+func (sc *ShowsController) Save(c *gin.Context) {
 	var show models.Show
 	c.BindJSON(&show)
 
-	_, err := showsService.UpdateShow(&show)
+	_, err := sc.ShowsService.UpdateShow(&show)
 	if err != nil {
 		renderError(c, err)
 	}
@@ -37,11 +35,12 @@ func save(c *gin.Context) {
 	renderOk(c, show)
 }
 
-func delete(c *gin.Context) {
+//Delete deletes the given show
+func (sc *ShowsController) Delete(c *gin.Context) {
 	var show models.Show
 	c.BindJSON(&show)
 
-	err := showsService.DeleteShow(&show)
+	err := sc.ShowsService.DeleteShow(&show)
 	if err != nil {
 		renderError(c, err)
 	}
@@ -49,10 +48,11 @@ func delete(c *gin.Context) {
 	renderOk(c, show)
 }
 
-func search(c *gin.Context) {
+//Search searches for shows
+func (sc *ShowsController) Search(c *gin.Context) {
 	var query = c.Query("query")
 
-	shows, err := showsService.SearchShow(query)
+	shows, err := sc.ShowsService.SearchShow(query)
 	if err != nil {
 		renderError(c, err)
 	}
@@ -60,9 +60,10 @@ func search(c *gin.Context) {
 	renderOk(c, shows)
 }
 
-func loadEpisodes(c *gin.Context) {
+//LoadEpisodes loads all episodes of a show
+func (sc *ShowsController) LoadEpisodes(c *gin.Context) {
 	var showID = c.Query("showId")
-	episodes, err := showsService.LoadEpisodes(showID)
+	episodes, err := sc.ShowsService.LoadEpisodes(showID)
 	if err != nil {
 		renderError(c, err)
 	}
@@ -70,12 +71,20 @@ func loadEpisodes(c *gin.Context) {
 	renderOk(c, episodes)
 }
 
-func recentEpisodes(c *gin.Context) {
+//RecentEpisodes loads all recent epiode of a show
+func (sc *ShowsController) RecentEpisodes(c *gin.Context) {
 	var duration = c.Query("duration")
-	episodes, err := showsService.LoadRecentEpisodes(duration)
+	episodes, err := sc.ShowsService.LoadRecentEpisodes(duration)
 	if err != nil {
 		renderError(c, err)
 	}
 
 	renderOk(c, episodes)
+}
+
+//UpdateEpisodes update
+func (sc *ShowsController) UpdateEpisodes(c *gin.Context) {
+	settings := sc.DataService.LoadSettings()
+	sc.ShowsService.ScanDownloadDir(settings)
+	OK(c)
 }

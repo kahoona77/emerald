@@ -114,7 +114,7 @@ angular.module('xtv.controllers').
     };
 
     $scope.getStatusClass = function (server) {
-      if (server.status == 'Connected') {
+      if (server.status) {
          return 'mdi-social-public';
       }
       return 'mdi-notification-do-not-disturb';
@@ -122,8 +122,8 @@ angular.module('xtv.controllers').
 
     $scope.toggleConnection = function (server) {
       $http.post ('irc/toggleConnection', angular.copy (server)).success (function (response) {
-        if (response.status = 'ok') {
-          server.status = response.result.status;
+        if (response.success) {
+          $scope.getServerStatus (server);
         } else {
           msg.error (response.message);
         }
@@ -132,14 +132,22 @@ angular.module('xtv.controllers').
 
     $scope.getServerStatus = function (server) {
       $http.post ('irc/getServerStatus', angular.copy (server)).success (function (response) {
-        server.status = response.status;
+        if (response.success) {
+          server.status = response.data.connected;
+        } else {
+          msg.error (response.message);
+        }
       });
     };
 
     $scope.loadConsole = function (server) {
       $scope.selectedServerConsole = undefined;
       $http.post ('irc/getServerConsole', angular.copy (server)).success (function (response) {
-        $scope.selectedServerConsole = response.console;
+        if (response.success) {
+          $scope.selectedServerConsole = response.data;
+        } else {
+          msg.error (response.message);
+        }
       });
     };
   }]);

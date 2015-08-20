@@ -8,56 +8,62 @@ import (
 	"labix.org/v2/mgo/bson"
 )
 
-var mongoSession *mgo.Session
+//MongoService connects with MongoDB
+type MongoService struct {
+	session *mgo.Session
+}
 
-func InitDB() {
+//NewService creates a new MongoService
+func NewService() *MongoService {
+	m := new(MongoService)
 
 	//creating db
-	var err error
-	mongoSession, err = mgo.Dial("localhost") //mgo.Dial("192.168.56.101") //mgo.Dial("localhost")
+	session, err := mgo.Dial("localhost") //mgo.Dial("192.168.56.101") //mgo.Dial("localhost")
 	if err != nil {
-		log.Printf("DB Error", err)
+		log.Print("DB Error", err)
 	} else {
-		log.Printf("DB Connected")
+		m.session = session
+		log.Print("DB Connected")
 	}
+	return m
 }
 
-func getCollection(collectionName string) *mgo.Collection {
-	return mongoSession.DB("xtv").C(collectionName)
+func (m *MongoService) getCollection(collectionName string) *mgo.Collection {
+	return m.session.DB("xtv").C(collectionName)
 }
 
-func All(collection string, results interface{}) error {
-	return getCollection(collection).Find(nil).All(results)
+func (m *MongoService) All(collection string, results interface{}) error {
+	return m.getCollection(collection).Find(nil).All(results)
 }
 
-func CountAll(collection string) (int, error) {
-	return getCollection(collection).Find(nil).Count()
+func (m *MongoService) CountAll(collection string) (int, error) {
+	return m.getCollection(collection).Find(nil).Count()
 }
 
-func FindWithQuery(collection string, query *bson.M, results interface{}) error {
-	return getCollection(collection).Find(query).All(results)
+func (m *MongoService) FindWithQuery(collection string, query *bson.M, results interface{}) error {
+	return m.getCollection(collection).Find(query).All(results)
 }
 
-func FindById(collection string, docId string, result models.MongoModel) error {
-	return getCollection(collection).FindId(docId).One(result)
+func (m *MongoService) FindById(collection string, docId string, result models.MongoModel) error {
+	return m.getCollection(collection).FindId(docId).One(result)
 }
 
-func FindFirst(collection string, result models.MongoModel) error {
-	return getCollection(collection).Find(nil).One(result)
+func (m *MongoService) FindFirst(collection string, result models.MongoModel) error {
+	return m.getCollection(collection).Find(nil).One(result)
 }
 
-func Remove(collection string, docId string) error {
-	return getCollection(collection).RemoveId(docId)
+func (m *MongoService) Remove(collection string, docId string) error {
+	return m.getCollection(collection).RemoveId(docId)
 }
 
-func RemoveAll(collection string, query *bson.M) (info *mgo.ChangeInfo, err error) {
-	return getCollection(collection).RemoveAll(query)
+func (m *MongoService) RemoveAll(collection string, query *bson.M) (info *mgo.ChangeInfo, err error) {
+	return m.getCollection(collection).RemoveAll(query)
 }
 
-func Save(collection string, docId string, doc models.MongoModel) (info *mgo.ChangeInfo, err error) {
+func (m *MongoService) Save(collection string, docId string, doc models.MongoModel) (info *mgo.ChangeInfo, err error) {
 	if docId == "" {
 		docId = bson.NewObjectId().Hex()
 		doc.SetId(docId)
 	}
-	return getCollection(collection).UpsertId(docId, doc)
+	return m.getCollection(collection).UpsertId(docId, doc)
 }

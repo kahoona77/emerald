@@ -31,8 +31,8 @@ angular.module('xtv.controllers').
     $scope.countPackets();
 
     $scope.startDownload = function (item) {
-      $http.post('downloads/downloadPacket', {data: item}).success(function(response){
-        if (response.status == 'ok') {
+      $http.post('downloads/downloadPacket', item).success(function(response){
+        if (response.success) {
           msg.show ("Added '" + item.name + "' to Download-Queue.");
         } else {
           msg.error (response.message);

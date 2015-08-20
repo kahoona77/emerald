@@ -4,25 +4,22 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/kahoona77/emerald/models"
 	"github.com/kahoona77/emerald/services/dataService"
+	"github.com/kahoona77/emerald/services/irc"
 	"github.com/revel/revel"
 )
 
 // DataController creates all routes for the DataController
-func DataController(router *gin.RouterGroup) {
-	router.GET("/loadSettings", loadSettings)
-	router.POST("/saveSettings", saveSettings)
-	router.GET("/countPackets", countPackets)
-	router.GET("/findPackets", findPackets)
-	router.GET("/loadServers", loadServers)
-	router.POST("/deleteServer", deleteServer)
-	router.POST("/saveServer", saveServer)
+type DataController struct {
+	DataService *dataService.DataService `inject:""`
+	IrcClient   *irc.Client              `inject:""`
 }
 
-func saveServer(c *gin.Context) {
+// SaveServer saves a server
+func (dc *DataController) SaveServer(c *gin.Context) {
 	var server models.Server
 	c.BindJSON(&server)
 
-	err := dataService.SaveServer(&server)
+	err := dc.DataService.SaveServer(&server)
 	if err != nil {
 		renderErrorMsg(c, "Error while saving server")
 	}
@@ -30,11 +27,12 @@ func saveServer(c *gin.Context) {
 	renderOk(c, server)
 }
 
-func deleteServer(c *gin.Context) {
+//DeleteServer deletes a server
+func (dc *DataController) DeleteServer(c *gin.Context) {
 	var server models.Server
 	c.BindJSON(&server)
 
-	err := dataService.DeleteServer(&server)
+	err := dc.DataService.DeleteServer(&server)
 	if err != nil {
 		renderErrorMsg(c, "Error while deleting server")
 	}
@@ -42,37 +40,43 @@ func deleteServer(c *gin.Context) {
 	renderOk(c, server)
 }
 
-func loadServers(c *gin.Context) {
-	servers, _ := dataService.FindAllServers()
+//LoadServers loads all servers
+func (dc *DataController) LoadServers(c *gin.Context) {
+	servers, _ := dc.DataService.FindAllServers()
 	renderOk(c, servers)
 }
 
-func loadSettings(c *gin.Context) {
-	settings := dataService.LoadSettings()
+//LoadSettings loads the settings
+func (dc *DataController) LoadSettings(c *gin.Context) {
+	settings := dc.DataService.LoadSettings()
 	renderOk(c, settings)
 }
 
-func saveSettings(c *gin.Context) {
+//SaveSettings saves the settings
+func (dc *DataController) SaveSettings(c *gin.Context) {
 	var settings models.XtvSettings
 	c.BindJSON(&settings)
 
-	dataService.SaveSettings(&settings)
+	dc.DataService.SaveSettings(&settings)
+	dc.IrcClient.SetDownloadLimit(settings.MaxDownStream)
 	renderOk(c, nil)
 }
 
-func findPackets(c *gin.Context) {
+//FindPackets finds DCC packets
+func (dc *DataController) FindPackets(c *gin.Context) {
 	var query = c.Query("query")
-	packtes, err := dataService.FindPackets(query)
+	packtes, err := dc.DataService.FindPackets(query)
 	if err != nil {
 		renderError(c, err)
 	}
 	renderOk(c, packtes)
 }
 
-func countPackets(c *gin.Context) {
-	deletedPacktes, _ := dataService.DeleteOldPackets()
+//CountPackets counts alls packest in the DB - first delets old packets
+func (dc *DataController) CountPackets(c *gin.Context) {
+	deletedPacktes, _ := dc.DataService.DeleteOldPackets()
 	revel.INFO.Printf("Deleted %v packets", deletedPacktes)
 
-	packetCount, _ := dataService.CountPackets()
+	packetCount, _ := dc.DataService.CountPackets()
 	renderOk(c, packetCount)
 }

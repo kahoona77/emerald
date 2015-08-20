@@ -9,8 +9,8 @@ angular.module('xtv.controllers').
 
     $scope.loadDownloads = function () {
         $http.get('downloads/listDownloads',{params: { 'nocache': new Date().getTime() }}).success(function(response){
-            if (response.status == 'ok') {
-                $scope.downloads = response.downloads;
+            if (response.success) {
+                $scope.downloads = response.data;
                 //reslect the download
                 if ($scope.selectedDownload) {
                   angular.forEach ($scope.downloads, function (item) {
@@ -45,8 +45,8 @@ angular.module('xtv.controllers').
     };
 
     $scope.stopDownload = function () {
-        $http.post('downloads/stopDownload', {data: $scope.selectedDownload}).success(function(response){
-            if (response.status == 'ok') {
+        $http.post('downloads/stopDownload', $scope.selectedDownload).success(function(response){
+            if (response.success) {
                 $scope.selectedDownload = undefined;
                 $scope.loadDownloads();
             } else {
@@ -56,8 +56,8 @@ angular.module('xtv.controllers').
     };
 
     $scope.resumeDownload = function () {
-        $http.post('downloads/resumeDownload', {data: $scope.selectedDownload}).success(function(response){
-            if (response.status == 'ok') {
+        $http.post('downloads/resumeDownload', $scope.selectedDownload).success(function(response){
+            if (response.success) {
                 $scope.selectedDownload = undefined;
                 $scope.loadDownloads();
             } else {
@@ -71,8 +71,8 @@ angular.module('xtv.controllers').
     };
 
     $scope.cancelDownload = function () {
-        $http.post('downloads/cancelDownload', {data: $scope.selectedDownload}).success(function(response){
-            if (response.status == 'ok') {
+        $http.post('downloads/cancelDownload', $scope.selectedDownload).success(function(response){
+            if (response.success) {
                 $scope.selectedDownload = undefined;
                 $scope.loadDownloads();
             } else {
@@ -90,8 +90,8 @@ angular.module('xtv.controllers').
       });
 
       angular.forEach (completed, function (item) {
-         $http.post('downloads/cancelDownload', {data: item}).success(function(response){
-              if (response.status == 'ok') {
+         $http.post('downloads/cancelDownload', item).success(function(response){
+              if (response.success) {
                   $scope.selectedDownload = undefined;
                   $scope.loadDownloads();
               } else {
@@ -125,8 +125,8 @@ angular.module('xtv.controllers').
 
     $scope.loadFiles = function () {
         $http.get('downloads/loadFiles').success(function(response){
-            if (response.status == 'ok') {
-                $scope.files = response.files;
+            if (response.success) {
+                $scope.files = response.data;
             } else {
                 msg.error (response.message);
             }
@@ -149,7 +149,7 @@ angular.module('xtv.controllers').
 
     $scope.updateEpisodes = function () {
      $http.get('/shows/updateEpisodes').success(function(response){
-        if (response.status == 'ok') {
+        if (response.success) {
           msg.show ("Updating episodes started...");
         } else {
           msg.error (response.message);
@@ -163,8 +163,8 @@ angular.module('xtv.controllers').
     };
 
     $scope.deleteSelectedFiles = function () {
-        $http.post('downloads/deleteFiles', {data: $scope.selectedFiles}).success(function(response){
-            if (response.status == 'ok') {
+        $http.post('downloads/deleteFiles', $scope.selectedFiles).success(function(response){
+            if (response.success) {
                 msg.show ("All files deleted!");
                 $scope.selectedFiles = [];
                 $scope.loadFiles();
@@ -179,8 +179,8 @@ angular.module('xtv.controllers').
     };
 
     $scope.moveFilesToMovies = function () {
-        $http.post('downloads/moveFilesToMovies', {data: $scope.selectedFiles}).success(function(response){
-            if (response.status == 'ok') {
+        $http.post('downloads/moveFilesToMovies', $scope.selectedFiles).success(function(response){
+            if (response.success) {
                 msg.show ("All files moved!");
                 $scope.selectedFiles = [];
                 $scope.loadFiles();

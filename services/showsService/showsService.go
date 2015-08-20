@@ -13,23 +13,27 @@ const SHOWS_REPO = "shows"
 const EPISODES_REPO = "episodes"
 const dateFormat = "2006-01-02"
 
-func FindAllShows() ([]models.Show, error) {
+type ShowsService struct {
+	Mongo *mongo.MongoService `inject:""`
+}
+
+func (s *ShowsService) FindAllShows() ([]models.Show, error) {
 	var shows []models.Show
-	err := mongo.All(SHOWS_REPO, &shows)
+	err := s.Mongo.All(SHOWS_REPO, &shows)
 	return shows, err
 }
 
-func SaveShow(show *models.Show) error {
-	_, err := mongo.Save(SHOWS_REPO, show.Id, show)
+func (s *ShowsService) SaveShow(show *models.Show) error {
+	_, err := s.Mongo.Save(SHOWS_REPO, show.Id, show)
 	return err
 }
 
-func DeleteShow(show *models.Show) error {
-	err := mongo.Remove(SHOWS_REPO, show.Id)
+func (s *ShowsService) DeleteShow(show *models.Show) error {
+	err := s.Mongo.Remove(SHOWS_REPO, show.Id)
 	return err
 }
 
-func SearchShow(query string) ([]models.Show, error) {
+func (s *ShowsService) SearchShow(query string) ([]models.Show, error) {
 	var shows []models.Show
 
 	results, err := tvdb.GetSeries(query)
@@ -40,13 +44,13 @@ func SearchShow(query string) ([]models.Show, error) {
 	shows = make([]models.Show, len(results.Series), len(results.Series))
 
 	for i := range results.Series {
-		shows[i] = showFromSeries(results.Series[i])
+		shows[i] = s.showFromSeries(results.Series[i])
 	}
 
 	return shows, nil
 }
 
-func showFromSeries(series *tvdb.Series) models.Show {
+func (s *ShowsService) showFromSeries(series *tvdb.Series) models.Show {
 	show := models.Show{}
 	show.Name = series.SeriesName
 	show.SearchName = series.SeriesName
@@ -54,18 +58,18 @@ func showFromSeries(series *tvdb.Series) models.Show {
 	show.Id = strconv.Itoa(int(series.ID))
 	show.Banner = series.Banner
 	show.Poster = series.Poster
-	show.FirstAired = parseDate(series.FirstAired)
+	show.FirstAired = s.parseDate(series.FirstAired)
 	show.Overview = series.Overview
 
 	return show
 }
 
-func parseDate(date string) time.Time {
+func (s *ShowsService) parseDate(date string) time.Time {
 	t, _ := time.Parse(dateFormat, date)
 	return t
 }
 
-func UpdateShow(show *models.Show) (*models.Show, error) {
+func (s *ShowsService) UpdateShow(show *models.Show) (*models.Show, error) {
 	seriesID, err := strconv.Atoi(show.Id)
 	series, err := tvdb.GetSeriesByID(uint64(seriesID))
 	if err != nil {
@@ -75,15 +79,15 @@ func UpdateShow(show *models.Show) (*models.Show, error) {
 	//update fields & save show
 	show.Banner = series.Banner
 	show.Poster = series.Poster
-	show.FirstAired = parseDate(series.FirstAired)
+	show.FirstAired = s.parseDate(series.FirstAired)
 	show.Overview = series.Overview
-	_, err = mongo.Save(SHOWS_REPO, show.Id, show)
+	_, err = s.Mongo.Save(SHOWS_REPO, show.Id, show)
 	if err != nil {
 		return nil, err
 	}
 
 	//update episodes
-	updateEpisodes(show)
+	s.updateEpisodes(show)
 
 	return show, nil
 }

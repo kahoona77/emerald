@@ -12,8 +12,9 @@ type Result struct {
 	Data    interface{} `json:"data,omitempty"`
 }
 
-func OK() Result {
-	return Result{true, "OK", nil}
+func OK(c *gin.Context) {
+	result := Result{true, "ok", nil}
+	c.JSON(http.StatusOK, result)
 }
 
 func ERROR(msg string) Result {
