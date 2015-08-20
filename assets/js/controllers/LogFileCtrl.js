@@ -7,7 +7,7 @@ angular.module('xtv.controllers').
 
     $scope.loadLogFile = function () {
       $http.get('data/loadLogFile').success(function(response){
-          $scope.logFile = response.logFile;
+          $scope.logFile = response.data;
       });
     };
     $scope.loadLogFile();

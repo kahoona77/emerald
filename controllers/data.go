@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"io/ioutil"
+
 	"github.com/gin-gonic/gin"
 	"github.com/kahoona77/emerald/models"
 	"github.com/kahoona77/emerald/services/dataService"
@@ -79,4 +81,18 @@ func (dc *DataController) CountPackets(c *gin.Context) {
 
 	packetCount, _ := dc.DataService.CountPackets()
 	renderOk(c, packetCount)
+}
+
+//LoadLogFile loads the logFile from Disk
+func (dc *DataController) LoadLogFile(c *gin.Context) {
+	logFile := "emerald.log"
+	buf, _ := ioutil.ReadFile(logFile)
+	renderOk(c, string(buf))
+}
+
+//ClearLogFile clears the logFile
+func (dc *DataController) ClearLogFile(c *gin.Context) {
+	logFile := "emerald.log"
+	ioutil.WriteFile(logFile, []byte(""), 0644)
+	OK(c)
 }

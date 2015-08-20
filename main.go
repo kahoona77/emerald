@@ -1,7 +1,9 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/facebookgo/inject"
@@ -12,12 +14,25 @@ import (
 )
 
 func main() {
+	// command line flags
+	port := flag.Int("port", 8080, "port to serve on")
+	logFile := flag.String("log", "emerald.log", "log-file")
+	flag.Parse()
+
+	// setup log
+	f, err := os.OpenFile(*logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Printf("error opening file: %v", err)
+	}
+	defer f.Close()
+	log.SetOutput(f)
+
 	var app core.EmeraldApp
 	mongoService := mongo.NewService()
 	ircClient := irc.NewClient()
 
 	var g inject.Graph
-	err := g.Provide(
+	err = g.Provide(
 		&inject.Object{Value: &app},
 		&inject.Object{Value: mongoService},
 		&inject.Object{Value: ircClient},
@@ -41,5 +56,8 @@ func main() {
 	app.AddControllers(router)
 
 	// Listen and server on 0.0.0.0:8080
-	router.Run(":8080")
+	log.Printf("Emerald started port %d\n", *port)
+	fmt.Printf("Emerald started port %d\n", *port)
+	addr := fmt.Sprintf(":%d", *port)
+	router.Run(addr)
 }
