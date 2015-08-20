@@ -49,6 +49,7 @@ func main() {
 
 	//setup gin
 	router := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
 	router.Static("/assets", "./assets")
 	router.StaticFile("/", "./assets/index.html")
 
