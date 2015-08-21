@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"io/ioutil"
 
 	"github.com/gin-gonic/gin"
