@@ -7,7 +7,6 @@ import (
 	"github.com/kahoona77/emerald/models"
 	"github.com/kahoona77/emerald/services/dataService"
 	"github.com/kahoona77/emerald/services/irc"
-	"github.com/revel/revel"
 )
 
 // DataController creates all routes for the DataController
@@ -78,7 +77,7 @@ func (dc *DataController) FindPackets(c *gin.Context) {
 //CountPackets counts alls packest in the DB - first delets old packets
 func (dc *DataController) CountPackets(c *gin.Context) {
 	deletedPacktes, _ := dc.DataService.DeleteOldPackets()
-	revel.INFO.Printf("Deleted %v packets", deletedPacktes)
+	log.Printf("Deleted %v packets", deletedPacktes)
 
 	packetCount, _ := dc.DataService.CountPackets()
 	renderOk(c, packetCount)
