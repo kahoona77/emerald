@@ -4,6 +4,13 @@ import (
 	"time"
 )
 
+//AppConfig the Emerald config
+type AppConfig struct {
+	Port    int
+	LogFile string
+	Mongodb string
+}
+
 //MongoModel the base model
 type MongoModel interface {
 	SetId(id string)

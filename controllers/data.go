@@ -14,6 +14,7 @@ import (
 type DataController struct {
 	DataService *dataService.DataService `inject:""`
 	IrcClient   *irc.Client              `inject:""`
+	Config      *models.AppConfig        `inject:""`
 }
 
 // SaveServer saves a server
@@ -85,14 +86,14 @@ func (dc *DataController) CountPackets(c *gin.Context) {
 
 //LoadLogFile loads the logFile from Disk
 func (dc *DataController) LoadLogFile(c *gin.Context) {
-	logFile := "emerald.log"
+	logFile := dc.Config.LogFile
 	buf, _ := ioutil.ReadFile(logFile)
 	renderOk(c, string(buf))
 }
 
 //ClearLogFile clears the logFile
 func (dc *DataController) ClearLogFile(c *gin.Context) {
-	logFile := "emerald.log"
+	logFile := dc.Config.LogFile
 	ioutil.WriteFile(logFile, []byte(""), 0644)
 	OK(c)
 }

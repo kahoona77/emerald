@@ -14,11 +14,11 @@ type MongoService struct {
 }
 
 //NewService creates a new MongoService
-func NewService() *MongoService {
+func NewService(conf *models.AppConfig) *MongoService {
 	m := new(MongoService)
 
 	//creating db
-	session, err := mgo.Dial("localhost") //mgo.Dial("192.168.56.101") //mgo.Dial("localhost")
+	session, err := mgo.Dial(conf.Mongodb) //mgo.Dial("192.168.56.101") //mgo.Dial("localhost")
 	if err != nil {
 		log.Print("DB Error", err)
 	} else {

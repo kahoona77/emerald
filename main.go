@@ -15,24 +15,17 @@ import (
 
 func main() {
 	// command line flags
-	port := flag.Int("port", 8080, "port to serve on")
-	logFile := flag.String("log", "emerald.log", "log-file")
+	confFile := flag.String("conf", "emerald.conf", "location of config-file")
 	flag.Parse()
-
-	// setup log
-	f, err := os.OpenFile(*logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		log.Printf("error opening file: %v", err)
-	}
-	defer f.Close()
-	log.SetOutput(f)
+	conf := core.LoadConfiguration(*confFile)
 
 	var app core.EmeraldApp
-	mongoService := mongo.NewService()
+	mongoService := mongo.NewService(&conf)
 	ircClient := irc.NewClient()
 
 	var g inject.Graph
-	err = g.Provide(
+	err := g.Provide(
+		&inject.Object{Value: &conf},
 		&inject.Object{Value: &app},
 		&inject.Object{Value: mongoService},
 		&inject.Object{Value: ircClient},
@@ -48,8 +41,14 @@ func main() {
 	}
 
 	//setup gin
-	router := gin.Default()
 	gin.SetMode(gin.ReleaseMode)
+	router := gin.New()
+
+	//Middlewares
+	// router.Use(gin.Logger())
+	router.Use(gin.Recovery())
+
+	//static files
 	router.Static("/assets", "./assets")
 	router.StaticFile("/", "./assets/index.html")
 
@@ -57,8 +56,8 @@ func main() {
 	app.AddControllers(router)
 
 	// Listen and server on 0.0.0.0:8080
-	log.Printf("Emerald started port %d\n", *port)
-	fmt.Printf("Emerald started port %d\n", *port)
-	addr := fmt.Sprintf(":%d", *port)
+	addr := fmt.Sprintf(":%d", conf.Port)
+	log.Printf("Emerald started port %v\n", addr)
+	fmt.Printf("Emerald started port %v\n", addr)
 	router.Run(addr)
 }
