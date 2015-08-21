@@ -1,41 +1,33 @@
 <div class="row">
-    <div class="col-sm-offset-3 col-sm-6 text-center">
-        <h2>Shows</h2>
-    </div>
-</div>
-
-<div class="row">
     <div class="col-sm-4">
         <div class="row">
-            <div class="col-sm-12">
-                <h3 class="pull-left xtv-row-heading">Shows</h3>
+            <div class="col-xs-12">
+                <h3 class="pull-left">Shows</h3>
                 <a class="btn btn-default btn-xs pull-right pointer" ng-click="showAddShowDialog()">
-                    <span class="glyphicon glyphicon-plus"></span> Add Show
+                    Add Show
                 </a>
             </div>
         </div>
-        <div class="row xtv-shows-container">
-          <div class="col-sm-12  list-group">
-            <div ng-repeat="show in shows | orderBy: 'name'">
-              <div  class="list-group-item" ng-class="{active: show==selectedShow}" ng-click="selectShow(show)">
-                  <div class="row-action-primary">
-                      <i class="mdi-av-movie"></i>
-                  </div>
-                  <div class="row-content">
-                    <div class="action-secondary" >
-                      <i title="delete Show" ng-click="showDeleteShowConfirm (show)" class="mdi-action-delete"></i>
-                    </div>
-                    <p class="list-group-item-heading">{{show.name}}</p>
-                    <p class="list-group-item-text">{{show.firstAired | date: 'yyyy-MM-dd'}}</p>
-                  </div>
+        <div class="row">
+          <div class="list-group">
+            <a  class="list-group-item" ng-repeat="show in shows | orderBy: 'name'" ng-class="{active: show==selectedShow}" ng-click="selectShow(show)">
+              <div class="row">
+                <div class="col-xs-8">
+                  <h4 class="list-group-item-heading">{{show.name}}</h4>
+                  <p class="list-group-item-text">{{show.firstAired | date: 'yyyy-MM-dd'}}</p>
+                </div>
+                <div class="col-xs-4" style="margin-top: 18px;">
+                    <i class="fa fa-trash-o pull-right pointer" title="Delete Show" ng-click="showDeleteShowConfirm (show)"></i>
+                    <i class="fa fa-film pull-right pointer" title="Load episodes" ng-click="loadEpisodes(show)"></i>
+                </div>
               </div>
-              <div class="list-group-separator"></div>
-            </div>
+            </a>
+
+
           </div>
         </div>
     </div>
-    <div class="col-sm-8 panel panel-default" ng-show="selectedShow">
-      <div class="panel-body">
+    <div class="col-sm-8 hidden-xs-down" ng-show="selectedShow">
         <div class="row">
           <div class="col-sm-12 well">
             <div class="row">
@@ -84,10 +76,6 @@
             </form>
           </div>
         </div>
-
-
-
-      </div>
     </div>
 </div>
 
@@ -99,23 +87,25 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="addShowDialogLabel"><span class="glyphicon glyphicon-cog"></span> Add Show</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="display: block; max-height: 410px; overflow-y: scroll">
                 <form role="form" name="addShowForm">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Showname" ng-model="query">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="submit" ng-click="searchShow()"><span class="glyphicon glyphicon-search"></span> Search</button>
-                        </span>
+                      <input type="text" class="form-control" placeholder="Showname" ng-model="query">
+                      <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit" ng-click="searchShow()"><i class="fa fa-search"></i> Search</button>
+                      </span>
                     </div>
                 </form>
-                <table class="table" style="display: block; max-height: 450px; overflow-y: scroll">
+                <table class="table">
                     <tr ng-repeat="result in searchResults">
                         <td>
                           {{result.name}} ({{result.firstAired | date: 'yyyy-MM-dd'}})
                           <p><small>{{result.overview}}</small></p>
                           </td>
                         <td>
-                            <a ng-click="saveShow(result)" class="btn btn-default btn-fab btn-raised btn-material-bluegrey mdi-content-add"></span></a>
+                            <a ng-click="saveShow(result)">
+                              <i class="fa fa-plus-circle fa-2x pull-right" style="margin-top: 40px;"></i>
+                            </a>
                         </td>
                     </tr>
                     </tbody>
@@ -136,14 +126,14 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="episodesDialogLabel"><span class="glyphicon glyphicon-cog"></span> Episodes for {{selectedShow.name}}</h4>
             </div>
-            <div class="modal-body" style="max-height: 500px; overflow-y: scroll">
+            <div class="modal-body" style="max-height: 410px; overflow-y: scroll">
               <div ng-repeat="season in seasons">
                 <table class="table" >
                     <tr ng-repeat="episode in season.episodes">
                         <td>{{episode.seasonNumber}} x {{episode.episodeNumber}}</td>
                         <td>{{episode.firstAired | date: 'yyyy-MM-dd'}}</td>
-                        <td>{{episode.name}}</td>
-                        <td><a ng-click="searchEpisode(selectedShow, episode)"><i class="mdi-action-search"></i></a></td>
+                        <td class="hidden-xs-down">{{episode.name}}</td>
+                        <td><a ng-click="searchEpisode(selectedShow, episode)"><i class="fa fa-search btn btn-primary btn-sm pull-right"></i></a></td>
                     </tr>
                     </tbody>
                 </table>

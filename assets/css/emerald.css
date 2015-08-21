@@ -1,0 +1,20 @@
+.bg-emerald {
+  background-color: #009B77;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.em-body {
+  padding-top: 10px;
+}
+
+.em-header {
+  padding-top: 15px;
+}
+
+.em-panel {
+  background-color: #EFEFEF;
+  padding: 10px;
+}

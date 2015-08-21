@@ -32,21 +32,24 @@ angular.module('xtv.controllers').
       $scope.loadConsole (server);
     };
 
-    $scope.showAddServerDialog = function () {
-      $('#addServerDialog').modal('show');
+    $scope.showServerDialog = function (server) {
+      if (!server) {
+        server = {
+           name: "",
+           port: "",
+           status: 'Not Connected',
+           channels: []
+       };
+      }
+
+      $scope.editServer = server;
+      $('#serverDialog').modal('show');
     };
 
-    $scope.addServer = function () {
-      var newServer = {
-          name: $scope.newServer.uri,
-          port: $scope.newServer.port,
-          status: 'Not Connected',
-          channels: []
-      };
-
-      $http.post ('data/saveServer', newServer).success (function (response) {
+    $scope.saveServer = function () {
+      $http.post ('data/saveServer', $scope.editServer).success (function (response) {
         if (response.status = 'ok') {
-          $('#addServerDialog').modal('hide');
+          $('#serverDialog').modal('hide');
           $scope.newServer = undefined;
           $scope.loadServers();
         } else {
@@ -115,9 +118,9 @@ angular.module('xtv.controllers').
 
     $scope.getStatusClass = function (server) {
       if (server.status) {
-         return 'mdi-social-public';
+         return 'fa-globe';
       }
-      return 'mdi-notification-do-not-disturb';
+      return 'fa-ban';
     };
 
     $scope.toggleConnection = function (server) {

@@ -12,10 +12,10 @@
     <title>XTV</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/assets/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/lib/bootstrap-material-design/dist/css/ripples.min.css" rel="stylesheet">
-    <link href="/assets/lib/bootstrap-material-design/dist/css/material-wfont.min.css" rel="stylesheet">
-    <link href="/assets/css/xtv.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
+    <link href="/assets/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- <link href="/assets/css/xtv.css" rel="stylesheet"> -->
+    <link href="/assets/css/emerald.css" rel="stylesheet">
 </head>
 
 <body>
@@ -26,41 +26,37 @@
     </div>
 </div>
 
-<div class="navbar navbar-default navbar-fixed-top navbar-material-bluegrey" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#/home">XTV</a>
+<nav class="navbar navbar-dark bg-emerald">
+  <a class="navbar-brand" href="#"><i class="fa fa-diamond"></i> Emerald</a>
+  <ul class="nav navbar-nav">
+    <li class="nav-item">
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Shows
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <a class="dropdown-item" href="#/shows">My Shows</a>
+          <a class="dropdown-item" href="#/shows_recent">Recent Episodes</a>
         </div>
-        <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                   <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                     <span class="mdi-av-movie"></span> Shows <span class="caret"></span>
-                    </a>
-                   <ul class="dropdown-menu" role="menu">
-                     <li><a href="#/shows">My Shows</a></li>
-                     <li><a href="#/shows_recent"></span>Recent Episodes</a></li>
-                   </ul>
-                 </li>
+      </div>
+  </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#/search"><span class="mdi-action-search"></span> Search</a></span></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#/downloads"><span class="mdi-file-file-download"></span> Downloads</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" ng-click="showSettingsDialog()"><span class="mdi-action-settings"></span> Settings</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#/logFile"><span class="glyphicon glyphicon-list-alt"></span> Log</a>
+    </li>
+  </ul>
 
+</nav>
 
-
-                <li><a href="#/search"><span class="mdi-action-search"></span> Search</a></li>
-                <li><a href="#/downloads"><span class="mdi-file-file-download"></span> Downloads</a></li>
-                <li><a ng-click="showSettingsDialog()"><span class="mdi-action-settings"></span> Settings</a></li>
-                <li><a href="#/logFile"><span class="glyphicon glyphicon-list-alt"></span> Log</a></li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</div>
-
-<div class="container">
+<div class="container em-body">
     <div ng-view></div>
 </div><!-- /.container -->
 
@@ -130,8 +126,6 @@
 <script src="/assets/lib/jquery/dist/jquery.min.js"></script>
 <script src="/assets/lib/underscore/underscore.js"></script>
 <script src="/assets/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/assets/lib/bootstrap-material-design/dist/js/ripples.min.js"></script>
-<script src="/assets/lib/bootstrap-material-design/dist/js/material.min.js"></script>
 <!-- In production use:
  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
  -->
