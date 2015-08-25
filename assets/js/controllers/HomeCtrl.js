@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('xtv.controllers').
+angular.module('emerald.controllers').
   controller('HomeCtrl', ['$scope', '$http', 'msg', function($scope, $http, msg) {
 
     $scope.loadServers = function () {

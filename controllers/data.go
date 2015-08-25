@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"log"
 	"io/ioutil"
 
 	"github.com/gin-gonic/gin"
@@ -57,7 +56,7 @@ func (dc *DataController) LoadSettings(c *gin.Context) {
 
 //SaveSettings saves the settings
 func (dc *DataController) SaveSettings(c *gin.Context) {
-	var settings models.XtvSettings
+	var settings models.EmeraldSettings
 	c.BindJSON(&settings)
 
 	dc.DataService.SaveSettings(&settings)
@@ -77,8 +76,7 @@ func (dc *DataController) FindPackets(c *gin.Context) {
 
 //CountPackets counts alls packest in the DB - first delets old packets
 func (dc *DataController) CountPackets(c *gin.Context) {
-	deletedPacktes, _ := dc.DataService.DeleteOldPackets()
-	log.Printf("Deleted %v packets", deletedPacktes)
+	dc.DataService.DeleteOldPackets()
 
 	packetCount, _ := dc.DataService.CountPackets()
 	renderOk(c, packetCount)

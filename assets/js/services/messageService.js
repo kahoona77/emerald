@@ -1,4 +1,4 @@
-angular.module ('xtv.services').factory('msg', [ '$rootScope', '$timeout', function($rootScope, $timeout) {
+angular.module ('emerald.services').factory('msg', [ '$rootScope', '$timeout', function($rootScope, $timeout) {
     return {
         show: function (message, type, timeout) {
             $rootScope.message = {};

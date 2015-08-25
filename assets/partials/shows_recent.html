@@ -4,20 +4,20 @@
     </div>
 </div>
 
-  <div class="list-group">
-    <a  class="list-group-item" ng-repeat="it in episodes | orderBy: 'episode.firstAired' : true">
-      <div class="row">
-        <div class="col-xs-3 col-sm-2" style="margin-top: 10px;">
-            <img style="width: 75px; height: initial;" ng-src="http://thetvdb.com/banners/{{it.show.poster}}">
-        </div>
-        <div class="col-xs-6 col-sm-9">
-          <p class="list-group-item-heading"><strong>{{it.show.name}} - ({{it.episode.seasonNumber}}x{{it.episode.episodeNumber}})</strong> </p>
-          <p class="list-group-item-text"><strong>{{it.episode.name}}</strong> {{it.episode.firstAired | date : 'dd.MM.yyyy' }}</p>
-          <p class="list-group-item-text hidden-xs-down">{{it.episode.overview}}</p>
-        </div>
-        <div class="col-xs-3 col-sm-1" style="margin-top: 50px;">
-              <i class="fa fa-download btn btn-primary pull-right" ng-click="searchEpisode (it.show, it.episode)"></i>
-        </div>
+<div class="list-group em-list em-panel">
+  <a  class="list-group-item" ng-repeat="it in episodes | orderBy: 'episode.firstAired' : true">
+    <div class="row">
+      <div class="col-xs-3 col-sm-2" style="margin-top: 10px;">
+          <img style="width: 75px; height: initial;" ng-src="http://thetvdb.com/banners/{{it.show.poster}}">
       </div>
-    </a>
-  </div>
+      <div class="col-xs-6 col-sm-9">
+        <p class="list-group-item-heading"><strong>{{it.show.name}} - ({{it.episode.seasonNumber}}x{{it.episode.episodeNumber}})</strong> </p>
+        <p class="list-group-item-text"><strong>{{it.episode.name}}</strong> {{it.episode.firstAired | date : 'dd.MM.yyyy' }}</p>
+        <p class="list-group-item-text hidden-xs-down">{{it.episode.overview}}</p>
+      </div>
+      <div class="col-xs-3 col-sm-1" style="margin-top: 50px;">
+            <i class="fa fa-download btn btn-primary pull-right" ng-click="searchEpisode (it.show, it.episode)"></i>
+      </div>
+    </div>
+  </a>
+</div>

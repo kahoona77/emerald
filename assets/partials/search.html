@@ -1,4 +1,4 @@
-<div class="row xtv-search-filed">
+<div class="row">
     <div class="col-xs-offset-1 col-xs-10 text-center">
         <h2>Total Packets: {{packetCount}}</h2>
     </div>
@@ -10,7 +10,7 @@
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Query" ng-model="query">
             <span class="input-group-btn">
-              <button class="btn btn-primary" type="submit" ng-click="search()"><i class="fa fa-search"></i> Search</button>
+              <button class="btn btn-primary" type="submit" ng-click="search()"><i class="fa fa-search"></i> <span class="hidden-xs-down">Search</span></button>
             </span>
           </div>
         </form>
@@ -25,7 +25,7 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Size</th>
-                <th>Last Mentioned</th>
+                <th class="hidden-xs-down">Last Mentioned</th>
             </tr>
             </thead>
             <tbody>
@@ -36,12 +36,12 @@
                       <a ng-click="startDownload(result)" class="btn btn-primary btn-sm"><i class="fa fa-download"></i></a>
                     </div>
                 </td>
-                <td style="max-width:250px">
+                <td class="em-td-max">
                    <div><strong>{{result.channel}}|{{result.bot}}</strong></div>
                    <div style="word-wrap: break-word">{{result.name}}</div>
                 </td>
                 <td>{{result.size}}</td>
-                <td>{{result.date | date:'dd.MM.yyyy HH:mm'}}</td>
+                <td class="hidden-xs-down">{{result.date | date:'dd.MM.yyyy HH:mm'}}</td>
             </tr>
             </tbody>
         </table>

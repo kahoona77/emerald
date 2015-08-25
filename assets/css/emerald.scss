@@ -1,0 +1,102 @@
+$em-primary:             #009B77 !default;
+$em-background:          #EFEFEF !default;
+
+//bs override
+.navbar-dark .navbar-nav .nav-link {
+  color: #fff;
+}
+
+:focus {
+    outline: $em-primary auto 5px;
+    outline-color: $em-primary;
+    outline-style: auto;
+    outline-width: 5px;
+}
+
+.bg-emerald {
+  background-color: $em-primary;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.em-body {
+  padding-top: 10px;
+}
+
+.em-header {
+  padding-top: 15px;
+}
+
+.em-panel {
+  background-color: $em-background;
+  padding: 10px;
+}
+
+.em-list {
+  max-height: 600px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+@media (max-width: 34em) {
+  .em-list {
+    max-height: 400px;
+  }
+}
+
+.em-td-max {
+  max-width: 300px;
+}
+
+@media (max-width: 34em) {
+  .em-td-max {
+    max-width: 220px;
+  }
+}
+
+.em-log {
+  background-color: $em-background;
+  padding: 10px;
+  max-height: 600px;
+}
+
+@media (max-width: 34em) {
+  .em-log {
+    max-height: 400px;
+  }
+}
+
+.em-active {
+  background-color: #D0D0D0;
+}
+
+.em-nav-toggle {
+  color: #fff;
+  margin-left: -25px;
+}
+.em-nav-toggle-brand {
+  display: inline-block;
+  margin-left: 15px;
+}
+
+.em-nav-menu {
+  position: absolute;
+  z-index: 1000;
+  background-color: $em-primary;
+
+  padding-right: 10px;
+  width: 100%;
+  font-size: 13pt;
+  line-height: 45px;
+}
+
+.em-nav-menu ul {
+   list-style-type: none;
+   -webkit-padding-start: 20px;
+}
+
+.em-nav-menu a {
+   color: #fff;
+}

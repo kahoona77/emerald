@@ -30,7 +30,7 @@ func TestCleanFilename(t *testing.T) {
 }
 
 func TestGetTempFile(t *testing.T) {
-	settings := new(models.XtvSettings)
+	settings := new(models.EmeraldSettings)
 	settings.TempDir = "c:/temp"
 	dcc := DccService{}
 	fileEvent := DccFileEvent{"SEND", "simpsons.mkv", nil, "", 0}

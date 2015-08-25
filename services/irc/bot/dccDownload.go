@@ -12,7 +12,7 @@ import (
 	"github.com/kahoona77/emerald/models"
 )
 
-func (ib *IrcBot) startDownload(fileEvent *models.DccFileEvent, startPos int64, settings *models.XtvSettings) {
+func (ib *IrcBot) startDownload(fileEvent *models.DccFileEvent, startPos int64, settings *models.EmeraldSettings) {
 	file := getTempFile(fileEvent, settings)
 
 	// set start position
@@ -107,7 +107,7 @@ func (ib *IrcBot) createConnection(fileEvent *models.DccFileEvent) (net.Conn, er
 	return conn, nil
 }
 
-func getTempFile(fileEvent *models.DccFileEvent, settings *models.XtvSettings) *os.File {
+func getTempFile(fileEvent *models.DccFileEvent, settings *models.EmeraldSettings) *os.File {
 	filename := filepath.FromSlash(settings.TempDir + "/" + fileEvent.FileName)
 	_, err := os.Stat(filename)
 
@@ -126,7 +126,7 @@ func getTempFile(fileEvent *models.DccFileEvent, settings *models.XtvSettings) *
 	return fo
 }
 
-func fileExists(fileEvent *models.DccFileEvent, settings *models.XtvSettings) (bool, int64) {
+func fileExists(fileEvent *models.DccFileEvent, settings *models.EmeraldSettings) (bool, int64) {
 	filename := filepath.FromSlash(settings.TempDir + "/" + fileEvent.FileName)
 	info, err := os.Stat(filename)
 	if os.IsNotExist(err) {

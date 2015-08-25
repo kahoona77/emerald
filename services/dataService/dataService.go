@@ -36,13 +36,13 @@ func (d *DataService) SaveServer(server *models.Server) error {
 	return err
 }
 
-func (d *DataService) LoadSettings() *models.XtvSettings {
-	var settings models.XtvSettings
+func (d *DataService) LoadSettings() *models.EmeraldSettings {
+	var settings models.EmeraldSettings
 	d.MongoService.FindFirst(settingsCollection, &settings)
 	return &settings
 }
 
-func (d *DataService) SaveSettings(settings *models.XtvSettings) error {
+func (d *DataService) SaveSettings(settings *models.EmeraldSettings) error {
 	_, err := d.MongoService.Save(settingsCollection, settings.Id, settings)
 	return err
 }

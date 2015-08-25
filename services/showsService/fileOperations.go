@@ -28,7 +28,7 @@ type ShowInfo struct {
 }
 
 // ScanDownloadDir tries to move episodes from the download-folder
-func (s *ShowsService) ScanDownloadDir(settings *models.XtvSettings) {
+func (s *ShowsService) ScanDownloadDir(settings *models.EmeraldSettings) {
 	// iterate over files in downlod-Dir
 	err := filepath.Walk(settings.DownloadDir, func(file string, info os.FileInfo, err error) error {
 		if !info.IsDir() {
@@ -44,7 +44,7 @@ func (s *ShowsService) ScanDownloadDir(settings *models.XtvSettings) {
 }
 
 // MoveEpisode moves the epsiode to its season folder
-func (s *ShowsService) MoveEpisode(file string, settings *models.XtvSettings, updateKodi bool) {
+func (s *ShowsService) MoveEpisode(file string, settings *models.EmeraldSettings, updateKodi bool) {
 	info := s.parseShow(file)
 
 	if info != nil {
@@ -155,7 +155,7 @@ func (s *ShowsService) parseShow(absoluteFile string) *ShowInfo {
 }
 
 // UpdateKodi sned a request to Kodi to update its database
-func UpdateKodi(settings *models.XtvSettings) {
+func UpdateKodi(settings *models.EmeraldSettings) {
 	//connect
 	conn, err := net.Dial("tcp", settings.KodiAddress)
 	if err != nil {

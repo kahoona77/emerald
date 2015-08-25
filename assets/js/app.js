@@ -1,16 +1,16 @@
 'use strict';
 
-angular.module('xtv.controllers', []);
-angular.module('xtv.services', []);
+angular.module('emerald.controllers', []);
+angular.module('emerald.services', []);
 
 // Declare app level module which depends on filters, and services
-angular.module('xtv', [
+angular.module('emerald', [
   'ngRoute',
   'ngAnimate',
-  'xtv.filters',
-  'xtv.services',
-  'xtv.directives',
-  'xtv.controllers',
+  'emerald.filters',
+  'emerald.services',
+  'emerald.directives',
+  'emerald.controllers',
 ]).config(['$routeProvider', function($routeProvider) {
 
   $routeProvider.when('/home', {templateUrl: 'assets/partials/home.html', controller: 'HomeCtrl'});
@@ -22,6 +22,6 @@ angular.module('xtv', [
   $routeProvider.otherwise({redirectTo: '/home'});
 }]).run(['$rootScope', function ($rootScope) {
         $rootScope.showSettingsDialog = function () {
-            $rootScope.$broadcast ('xtv:showSettingsDialog');
+            $rootScope.$broadcast ('emerald:showSettingsDialog');
         }
     }]);

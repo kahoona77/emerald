@@ -1,15 +1,15 @@
 <div class="row">
-  <div class="col-sm-6">
+  <div class="col-xs-6">
     <h3>
       LogFile
     </h3>
   </div>
-  <div class="col-sm-6">
-     <h4><a class="pull-right icon-material-bluegrey" style="margin: 5px; margin-top: 20px;" ng-click="clearLogFile()"><span class="mdi-action-delete"></span></a></h4>
-     <h4><a class="pull-right icon-material-bluegrey" style="margin: 5px; margin-top: 20px;" ng-click="loadLogFile()"><span class="mdi-notification-sync"></span></a></h4>
+  <div class="col-xs-6">
+     <a class="pull-right" style="margin-right: 5px;" ng-click="loadLogFile()"><i class="fa fa-refresh fa-2x"></i></a>
+     <a class="pull-right" style="margin-right: 5px;" ng-click="clearLogFile()"><i class="fa fa-trash-o fa-2x"></i></a>
   </div>
 </div>
 
 <div class="row">
-  <textarea class="col-sm-12" style="height: 750px;" ng-model="logFile"></textarea>
+  <pre class="col-xs-12 em-log" ng-bind="logFile"></pre>
 </div>

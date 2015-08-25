@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('xtv.controllers').
+angular.module('emerald.controllers').
   controller('SettingsCtrl', ['$scope', '$http', function($scope, $http) {
 
     $scope.loadSettings = function () {
@@ -28,7 +28,7 @@ angular.module('xtv.controllers').
       });
     };
 
-    $scope.$on('xtv:showSettingsDialog', function () {
+    $scope.$on('emerald:showSettingsDialog', function () {
       $scope.showSettingsDialog();
     });
 

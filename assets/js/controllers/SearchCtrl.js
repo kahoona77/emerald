@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('xtv.controllers').
+angular.module('emerald.controllers').
   controller('SearchCtrl', ['$scope', 'msg', '$http', '$routeParams', function($scope, msg, $http, $routeParams) {
 
     $scope.query = undefined;

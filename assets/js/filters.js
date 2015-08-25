@@ -2,7 +2,7 @@
 
 /* Filters */
 
-angular.module('xtv.filters', []).
+angular.module('emerald.filters', []).
   filter('megaBytes', [function() {
     return function(input) {
 

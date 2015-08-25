@@ -1,23 +1,29 @@
 
 <!-- Current Downloads -->
 <div class="row">
-    <div class="col-sm-3"><h3>Current Downloads</h3></div>
-    <div class="col-sm-9">
+    <div class="col-sm-4"><h3>Current Downloads</h3></div>
+    <div class="col-sm-8">
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group">
                 <button type="button" class="btn btn-default btn-sm" ng-click="stopDownload()" ng-disabled="!selectedDownload || selectedDownload.status=='FAILED' || selectedDownload.status=='COMPLETE'">
-                    <span class="glyphicon glyphicon-stop"></span> Stop
+                    <span class="fa fa-stop"></span>
+                    <span class="hidden-xs-down">Stop</span>
                 </button>
                 <button type="button" class="btn btn-default btn-sm" ng-click="resumeDownload()" ng-disabled="!selectedDownload || selectedDownload.status=='RUNNING' || selectedDownload.status=='COMPLETE'">
-                    <span class="glyphicon glyphicon-play"></span> Resume
+                    <span class="fa fa-play"></span>
+                    <span class="hidden-xs-down">Resume</span>
                 </button>
                 <button type="button" class="btn btn-default btn-sm" ng-click="showCancelConfirm()" ng-disabled="!selectedDownload">
-                    <span class="glyphicon glyphicon-remove"></span> Cancle
+                    <span class="fa fa-times"></span>
+                    <span class="hidden-xs-down">Cancle</span>
                 </button>
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-default btn-sm" ng-click="clearDownloads()">Clear Completed</button>
+                <button type="button" class="btn btn-default btn-sm" ng-click="clearDownloads()">
+                  <span class="fa fa-repeat"></span>
+                  <span class="hidden-xs-down">Clear Completed</span>
+                </button>
             </div>
         </div>
     </div>
@@ -28,23 +34,23 @@
         <table class="table">
             <thead>
             <tr>
-                <th>#</th>
+                <th class="hidden-xs-down">#</th>
                 <th>File</th>
                 <th>Size</th>
                 <th>Speed</th>
-                <th>Remaining</th>
+                <th class="hidden-xs-down">Remaining</th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="download in downloads  | orderBy: 'file'" ng-click="selectDownload(download)" class="pointer" ng-class="{active: download==selectedDownload}">
-                <td>{{$index + 1}}</td>
-                <td>
-                    <div><strong>{{download.file}}</strong></div>
+            <tr ng-repeat="download in downloads  | orderBy: 'file'" ng-click="selectDownload(download)" class="pointer" ng-class="{'em-active': download==selectedDownload}">
+                <td class="hidden-xs-down">{{$index + 1}}</td>
+                <td class="em-td-max">
+                    <div style="word-wrap: break-word"><strong>{{download.file}}</strong></div>
                     <download-progress ng-model="download"></download-progress>
                 </td>
                 <td>{{download.bytesReceived | megaBytes}} / {{download.size | megaBytes}}</td>
                 <td>{{download.speed | number:2}} Kb/s</td>
-                <td>{{calcTimeRemaining(download)}}</td>
+                <td class="hidden-xs-down">{{calcTimeRemaining(download)}}</td>
             </tr>
             </tbody>
         </table>
@@ -58,19 +64,22 @@
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group">
                 <button type="button" class="btn btn-default btn-sm" ng-click="loadFiles()">
-                    <span class="mdi-notification-sync"></span> Refresh
+                    <span class="fa fa-refresh"></span>
+                    <span class="hidden-xs-down">Refresh</span>
                 </button>
                 <button type="button" class="btn btn-default btn-sm" ng-click="showFileDelteConfirm()">
-                    <span class="mdi-action-delete"></span> Delete
+                    <span class="fa fa-times"></span>
+                    <span class="hidden-xs-down">Delete</span>
                 </button>
                 <button type="button" class="btn btn-default btn-sm" ng-click="showMoveFilesConfirm()">
-                    <span class="mdi-content-forward"></span> Move to Movies Dir
+                    <span class="fa fa-share"></span>
+                    <span class="hidden-xs-down">Move to Movies Dir</span>
                 </button>
             </div>
 
             <div class="btn-group">
                 <button type="button" class="btn btn-default btn-sm" ng-click="updateEpisodes()">
-                  <span class="mdi-notification-sync"></span> Update Episode
+                  <span class="fa fa-repeat"></span> Update Episodes
                   </button>
             </div>
         </div>
@@ -85,22 +94,22 @@
                 <th>#</th>
                 <th>File</th>
                 <th>Folder</th>
-                <th>Size</th>
+                <th class="hidden-xs-down">Size</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="file in files" ng-click="selectFile(file)" class="pointer">
                 <td>
-                  <span class="mdi-toggle-check-box" ng-show="isSelected(file)"></span>
-                  <span class="mdi-toggle-check-box-outline-blank" ng-show="!isSelected(file)"></span>
+                  <i class="fa fa-check-square-o" ng-show="isSelected(file)"></i>
+                  <i class="fa fa-square-o" ng-show="!isSelected(file)"></i>
                 </td>
-                <td>
-                  <span class="mdi-file-folder" ng-show="file.dir"></span>
-                  <span class="mdi-content-content-copy" ng-show="!file.dir"></span>
+                <td class="em-td-max" style="word-wrap: break-word">
+                  <span class="fa fa-folder-o" ng-show="file.dir"></span>
+                  <span class="fa fa-file-o" ng-show="!file.dir"></span>
                   {{file.name}}
                 </td>
                 <td>{{file.folder}}</td>
-                <td>{{file.size | megaBytes}}</td>
+                <td class="hidden-xs-down">{{file.size | megaBytes}}</td>
             </tr>
             </tbody>
         </table>

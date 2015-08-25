@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('xtv.controllers').
+angular.module('emerald.controllers').
   controller('ShowsCtrl', ['$scope', 'msg', '$http', '$location', function($scope, msg, $http, $location) {
 
     $scope.loadShows = function () {
@@ -38,6 +38,8 @@ angular.module('xtv.controllers').
     };
 
     $scope.showAddShowDialog = function () {
+      $scope.query = null;
+      $scope.searchResults = null;
       $('#addShowDialog').modal('show');
     };
 
@@ -92,6 +94,7 @@ angular.module('xtv.controllers').
     };
 
     $scope.searchEpisode = function (show, episode) {
+      $('#episodesDialog').modal ('hide');
       var pad = "00";
       var season = "" + episode.seasonNumber;
       season =  pad.substring(0, pad.length - season.length) + season;

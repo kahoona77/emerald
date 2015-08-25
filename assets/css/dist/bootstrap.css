@@ -1363,7 +1363,7 @@ pre {
     background-color: transparent;
     border: 0; }
   .form-control:focus {
-    border-color: #66afe9;
+    border-color: #009B77;
     outline: none; }
   .form-control::placeholder {
     color: #999;

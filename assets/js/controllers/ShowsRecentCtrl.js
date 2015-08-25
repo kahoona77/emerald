@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('xtv.controllers').
+angular.module('emerald.controllers').
   controller('ShowsRecentCtrl', ['$scope', 'msg', '$http', '$location', '$filter', function($scope, msg, $http, $location, $filter) {
 
     $scope.loadRecent = function () {

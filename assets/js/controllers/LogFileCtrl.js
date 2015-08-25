@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('xtv.controllers').
+angular.module('emerald.controllers').
   controller('LogFileCtrl', ['$scope', '$http', function($scope, $http) {
 
     $scope.loadLogFile = function () {

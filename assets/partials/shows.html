@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row em-panel">
     <div class="col-sm-4">
         <div class="row">
             <div class="col-xs-12">
@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="row">
-          <div class="list-group">
+          <div class="list-group em-list">
             <a  class="list-group-item" ng-repeat="show in shows | orderBy: 'name'" ng-class="{active: show==selectedShow}" ng-click="selectShow(show)">
               <div class="row">
                 <div class="col-xs-8">
@@ -87,7 +87,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="addShowDialogLabel"><span class="glyphicon glyphicon-cog"></span> Add Show</h4>
             </div>
-            <div class="modal-body" style="display: block; max-height: 410px; overflow-y: scroll">
+            <div class="modal-body" style="display: block; max-height: 450px; overflow-y: scroll">
                 <form role="form" name="addShowForm">
                     <div class="input-group">
                       <input type="text" class="form-control" placeholder="Showname" ng-model="query">
@@ -112,21 +112,20 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Episodes Modal -->
-<div class="modal fade" id="episodesDialog" tabindex="-1" role="dialog" aria-labelledby="episodesDialogLabel" aria-hidden="true">
+<div class="modal" id="episodesDialog" tabindex="-1" role="dialog" aria-labelledby="episodesDialogLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="episodesDialogLabel"><span class="glyphicon glyphicon-cog"></span> Episodes for {{selectedShow.name}}</h4>
             </div>
-            <div class="modal-body" style="max-height: 410px; overflow-y: scroll">
+            <div class="modal-body" style="max-height: 450px; overflow-y: scroll">
               <div ng-repeat="season in seasons">
                 <table class="table" >
                     <tr ng-repeat="episode in season.episodes">
@@ -138,10 +137,8 @@
                     </tbody>
                 </table>
               </div>
-
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>

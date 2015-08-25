@@ -27,7 +27,7 @@ func (ib *IrcBot) handleDCC(conn *irc.Conn, line *irc.Line) {
 	}
 }
 
-func (ib *IrcBot) handleSend(request []string, conn *irc.Conn, line *irc.Line, settings *models.XtvSettings) {
+func (ib *IrcBot) handleSend(request []string, conn *irc.Conn, line *irc.Line, settings *models.EmeraldSettings) {
 	fileName := request[1]
 	addrInt, _ := strconv.ParseInt(request[2], 0, 64)
 	address := inetNtoa(addrInt)
@@ -52,7 +52,7 @@ func (ib *IrcBot) handleSend(request []string, conn *irc.Conn, line *irc.Line, s
 	}
 }
 
-func (ib *IrcBot) handleAccept(request []string, settings *models.XtvSettings) {
+func (ib *IrcBot) handleAccept(request []string, settings *models.EmeraldSettings) {
 	log.Printf("received ACCEPT")
 
 	fileName := request[1]

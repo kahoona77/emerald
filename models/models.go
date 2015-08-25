@@ -62,7 +62,7 @@ func (this *Packet) SetId(id string) {
 }
 
 // Settings
-type XtvSettings struct {
+type EmeraldSettings struct {
 	Id            string `json:"id" bson:"_id"`
 	Nick          string `json:"nick" bson:"nick"`
 	TempDir       string `json:"tempDir" bson:"tempDir"`
@@ -74,7 +74,7 @@ type XtvSettings struct {
 	MaxDownStream int    `json:"maxDownStream" bson:"maxDownStream"`
 }
 
-func (this *XtvSettings) SetId(id string) {
+func (this *EmeraldSettings) SetId(id string) {
 	this.Id = id
 }
 

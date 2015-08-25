@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('xtv.controllers').
+angular.module('emerald.controllers').
   controller('DownloadsCtrl', ['$scope', '$timeout', '$http', 'msg', function($scope, $timeout, $http, msg) {
 
     $scope.downloads = [];
