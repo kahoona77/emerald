@@ -86,7 +86,7 @@ func (s *ShowsService) MoveEpisode(file string, settings *models.EmeraldSettings
 func (s *ShowsService) getShowData(info *ShowInfo) (*models.Show, *models.Episode) {
 	// find show
 	var shows []models.Show
-	query := bson.M{"searchName": info.Name}
+	query := bson.M{"searchName": bson.M{"$regex": info.Name, "$options": "i"}}
 	err := s.Mongo.FindWithQuery(SHOWS_REPO, &query, &shows)
 	if err != nil || len(shows) <= 0 {
 		log.Printf("could not find show: %v", info.Name)
