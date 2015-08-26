@@ -55,6 +55,9 @@ func main() {
 	//register all controllers
 	app.AddControllers(router)
 
+	//Start all jobs
+	app.StartJobs()
+
 	// Listen and server on 0.0.0.0:8080
 	addr := fmt.Sprintf(":%d", conf.Port)
 	log.Printf("Emerald started port %v\n", addr)
