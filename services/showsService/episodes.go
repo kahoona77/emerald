@@ -93,7 +93,8 @@ func (s *ShowsService) LoadRecentEpisodes(duration string) ([]models.RecentEpiso
 	days, _ := strconv.Atoi(duration)
 	dealy, _ := time.ParseDuration("-" + strconv.Itoa(days*24) + "h")
 	pastDate := time.Now().Add(dealy)
-	query := bson.M{"firstAired": bson.M{"$gt": pastDate, "$lt": time.Now()}}
+
+	query := bson.M{"firstAired": bson.M{"$gt": pastDate, "$lt": time.Now().AddDate(0, 0, -1)}}
 
 	var episodes []models.Episode
 	err := s.Mongo.FindWithQuery(EPISODES_REPO, &query, &episodes)
