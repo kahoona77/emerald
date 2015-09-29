@@ -15,7 +15,7 @@ import (
 func (ib *IrcBot) startDownload(fileEvent *models.DccFileEvent, startPos int64, settings *models.EmeraldSettings) {
 	//check if the file is in the queue
 	download := ib.pending[fileEvent.FileName]
-	if download != nil {
+	if download == nil {
 		log.Printf("Could not find download-file '%v' in pending list ", fileEvent.FileName)
 		return
 	}
