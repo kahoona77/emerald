@@ -53,16 +53,13 @@ func (ib *IrcBot) handleSend(request []string, conn *irc.Conn, line *irc.Line, s
 }
 
 func (ib *IrcBot) handleAccept(request []string, settings *models.EmeraldSettings) {
-	log.Printf("received ACCEPT")
-
 	fileName := request[1]
-	//port := request[2]
 	position, err := strconv.ParseInt(request[3], 10, 64)
-
 	if err != nil {
 		log.Printf("error while parsing position %v", err)
 		return
 	}
+	log.Printf("received ACCEPT (Resume) - file: %v, position: %v\n", fileName, position)
 
 	//find resume
 	fileEvent := ib.resumes[fileName]

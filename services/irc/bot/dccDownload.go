@@ -13,6 +13,16 @@ import (
 )
 
 func (ib *IrcBot) startDownload(fileEvent *models.DccFileEvent, startPos int64, settings *models.EmeraldSettings) {
+	//check if the file is in the queue
+	download := ib.pending[fileEvent.FileName]
+	if download != nil {
+		log.Printf("Could not find download-file '%v' in pending list ", fileEvent.FileName)
+		return
+	}
+
+	//remove from pending list
+	delete(ib.pending, fileEvent.FileName)
+
 	file := getTempFile(fileEvent, settings)
 
 	// set start position

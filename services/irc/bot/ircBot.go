@@ -12,7 +12,7 @@ import (
 	"github.com/kahoona77/emerald/services/dataService"
 )
 
-// IrcBot can connect to a specidic server
+// IrcBot can connect to a specific server
 type IrcBot struct {
 	server      *models.Server
 	updateChan  chan models.DccUpdate
@@ -24,6 +24,7 @@ type IrcBot struct {
 	regex      *regexp.Regexp
 	logCount   int
 	resumes    map[string]*models.DccFileEvent
+	pending    map[string]*models.Download
 }
 
 //NewIrcBot creates a new bot
@@ -38,6 +39,7 @@ func NewIrcBot(server *models.Server, updateChan chan models.DccUpdate, pool *io
 	bot.consoleLog = make([]string, 0)
 	bot.regex, _ = regexp.Compile(`(#[0-9]+).*\[\s*([0-9|\.]+[BbGgiKMs]+)\]\s+(.+).*`)
 	bot.resumes = make(map[string]*models.DccFileEvent)
+	bot.pending = make(map[string]*models.Download)
 	return bot
 }
 
@@ -146,6 +148,10 @@ func (ib *IrcBot) GetLog() string {
 // StartDownload starts the given download
 func (ib *IrcBot) StartDownload(download *models.Download) {
 	ib.logToConsole("Starting Download: " + download.File)
+
+	//add to pending list
+	ib.pending[download.File] = download
+
 	msg := "xdcc send " + getCleanPacketID(download)
 	ib.conn.Privmsg(download.Bot, msg)
 }
@@ -153,6 +159,10 @@ func (ib *IrcBot) StartDownload(download *models.Download) {
 //StopDownload stops the given download
 func (ib *IrcBot) StopDownload(download *models.Download) {
 	ib.logToConsole("Stopping Download: " + download.File)
+
+	//remove from pending list
+	delete(ib.pending, download.File)
+
 	msg := "xdcc cancel"
 	ib.conn.Privmsg(download.Bot, msg)
 }
