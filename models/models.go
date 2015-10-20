@@ -14,6 +14,7 @@ type AppConfig struct {
 //MongoModel the base model
 type MongoModel interface {
 	SetId(id string)
+	GetId() string
 }
 
 // Server represents a irc-server
@@ -26,6 +27,10 @@ type Server struct {
 
 func (this *Server) SetId(id string) {
 	this.Id = id
+}
+
+func (this *Server) GetId() string {
+	return this.Id
 }
 
 type Channel struct {
@@ -61,6 +66,10 @@ func (this *Packet) SetId(id string) {
 	this.Id = id
 }
 
+func (this *Packet) GetId() string {
+	return this.Id
+}
+
 // Settings
 type EmeraldSettings struct {
 	Id            string `json:"id" bson:"_id"`
@@ -76,6 +85,10 @@ type EmeraldSettings struct {
 
 func (this *EmeraldSettings) SetId(id string) {
 	this.Id = id
+}
+
+func (this *EmeraldSettings) GetId() string {
+	return this.Id
 }
 
 //Show
@@ -94,6 +107,10 @@ func (this *Show) SetId(id string) {
 	this.Id = id
 }
 
+func (this *Show) GetId() string {
+	return this.Id
+}
+
 //Episode
 type Episode struct {
 	Id            string    `json:"id" bson:"_id"`
@@ -108,6 +125,10 @@ type Episode struct {
 
 func (this *Episode) SetId(id string) {
 	this.Id = id
+}
+
+func (this *Episode) GetId() string {
+	return this.Id
 }
 
 //RecentEpisode

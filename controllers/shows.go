@@ -13,8 +13,19 @@ type ShowsController struct {
 	DataService  *dataService.DataService   `inject:""`
 }
 
+// ConfigureRoutes configures the routes for this controller
+func (sc *ShowsController) ConfigureRoutes(route *gin.RouterGroup) {
+	route.GET("load", sc.load)
+	route.POST("save", sc.save)
+	route.GET("delete", sc.delete)
+	route.GET("search", sc.search)
+	route.GET("loadEpisodes", sc.loadEpisodes)
+	route.GET("recentEpisodes", sc.recentEpisodes)
+	route.GET("updateEpisodes", sc.updateEpisodes)
+}
+
 //Load loads all shows
-func (sc *ShowsController) Load(c *gin.Context) {
+func (sc *ShowsController) load(c *gin.Context) {
 	shows, err := sc.ShowsService.FindAllShows()
 	if err != nil {
 		renderError(c, err)
@@ -23,7 +34,7 @@ func (sc *ShowsController) Load(c *gin.Context) {
 }
 
 //Save saves the given show
-func (sc *ShowsController) Save(c *gin.Context) {
+func (sc *ShowsController) save(c *gin.Context) {
 	var show models.Show
 	c.BindJSON(&show)
 
@@ -36,7 +47,7 @@ func (sc *ShowsController) Save(c *gin.Context) {
 }
 
 //Delete deletes the given show
-func (sc *ShowsController) Delete(c *gin.Context) {
+func (sc *ShowsController) delete(c *gin.Context) {
 	var show models.Show
 	c.BindJSON(&show)
 
@@ -49,7 +60,7 @@ func (sc *ShowsController) Delete(c *gin.Context) {
 }
 
 //Search searches for shows
-func (sc *ShowsController) Search(c *gin.Context) {
+func (sc *ShowsController) search(c *gin.Context) {
 	var query = c.Query("query")
 
 	shows, err := sc.ShowsService.SearchShow(query)
@@ -61,7 +72,7 @@ func (sc *ShowsController) Search(c *gin.Context) {
 }
 
 //LoadEpisodes loads all episodes of a show
-func (sc *ShowsController) LoadEpisodes(c *gin.Context) {
+func (sc *ShowsController) loadEpisodes(c *gin.Context) {
 	var showID = c.Query("showId")
 	episodes, err := sc.ShowsService.LoadEpisodes(showID)
 	if err != nil {
@@ -72,7 +83,7 @@ func (sc *ShowsController) LoadEpisodes(c *gin.Context) {
 }
 
 //RecentEpisodes loads all recent epiode of a show
-func (sc *ShowsController) RecentEpisodes(c *gin.Context) {
+func (sc *ShowsController) recentEpisodes(c *gin.Context) {
 	var duration = c.Query("duration")
 	episodes, err := sc.ShowsService.LoadRecentEpisodes(duration)
 	if err != nil {
@@ -83,7 +94,7 @@ func (sc *ShowsController) RecentEpisodes(c *gin.Context) {
 }
 
 //UpdateEpisodes update
-func (sc *ShowsController) UpdateEpisodes(c *gin.Context) {
+func (sc *ShowsController) updateEpisodes(c *gin.Context) {
 	settings := sc.DataService.LoadSettings()
 	sc.ShowsService.ScanDownloadDir(settings)
 	OK(c)

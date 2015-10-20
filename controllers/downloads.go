@@ -15,8 +15,20 @@ type DownloadsController struct {
 	FilesService *filesService.FilesService `inject:""`
 }
 
+// ConfigureRoutes configures the routes for this controller
+func (dc *DownloadsController) ConfigureRoutes(route *gin.RouterGroup) {
+	route.POST("downloadPacket", dc.downloadPacket)
+	route.GET("listDownloads", dc.listDownloads)
+	route.POST("stopDownload", dc.stopDownload)
+	route.POST("cancelDownload", dc.cancelDownload)
+	route.POST("resumeDownload", dc.resumeDownload)
+	route.GET("loadFiles", dc.loadFiles)
+	route.POST("deleteFiles", dc.deleteFiles)
+	route.POST("moveFilesToMovies", dc.moveFilesToMovies)
+}
+
 //DownloadPacket starts the download of a packet
-func (dc *DownloadsController) DownloadPacket(c *gin.Context) {
+func (dc *DownloadsController) downloadPacket(c *gin.Context) {
 	var packet models.Packet
 	c.BindJSON(&packet)
 	dc.IrcClient.DownloadPacket(&packet)
@@ -24,13 +36,13 @@ func (dc *DownloadsController) DownloadPacket(c *gin.Context) {
 }
 
 //ListDownloads loads all downloads
-func (dc *DownloadsController) ListDownloads(c *gin.Context) {
+func (dc *DownloadsController) listDownloads(c *gin.Context) {
 	downloads := dc.IrcClient.ListDownloads()
 	renderOk(c, downloads)
 }
 
 //StopDownload stops the given Download
-func (dc *DownloadsController) StopDownload(c *gin.Context) {
+func (dc *DownloadsController) stopDownload(c *gin.Context) {
 	var download models.Download
 	c.BindJSON(&download)
 	dc.IrcClient.StopDownload(&download)
@@ -38,7 +50,7 @@ func (dc *DownloadsController) StopDownload(c *gin.Context) {
 }
 
 //CancelDownload canceles the given download
-func (dc *DownloadsController) CancelDownload(c *gin.Context) {
+func (dc *DownloadsController) cancelDownload(c *gin.Context) {
 	var download models.Download
 	c.BindJSON(&download)
 	dc.IrcClient.CancelDownload(&download)
@@ -46,7 +58,7 @@ func (dc *DownloadsController) CancelDownload(c *gin.Context) {
 }
 
 //ResumeDownload resumes the given download
-func (dc *DownloadsController) ResumeDownload(c *gin.Context) {
+func (dc *DownloadsController) resumeDownload(c *gin.Context) {
 	var download models.Download
 	c.BindJSON(&download)
 	dc.IrcClient.ResumeDownload(&download)
@@ -54,13 +66,13 @@ func (dc *DownloadsController) ResumeDownload(c *gin.Context) {
 }
 
 //LoadFiles loads all files from the files-service
-func (dc *DownloadsController) LoadFiles(c *gin.Context) {
+func (dc *DownloadsController) loadFiles(c *gin.Context) {
 	files := dc.FilesService.GetFiles()
 	renderOk(c, files)
 }
 
 //DeleteFiles deletes the given files
-func (dc *DownloadsController) DeleteFiles(c *gin.Context) {
+func (dc *DownloadsController) deleteFiles(c *gin.Context) {
 	var files []filesService.File
 	c.BindJSON(&files)
 	err := dc.FilesService.DeleteFiles(files)
@@ -73,7 +85,7 @@ func (dc *DownloadsController) DeleteFiles(c *gin.Context) {
 }
 
 //MoveFilesToMovies moves the given Files to the Movied-Dir
-func (dc *DownloadsController) MoveFilesToMovies(c *gin.Context) {
+func (dc *DownloadsController) moveFilesToMovies(c *gin.Context) {
 	var files []filesService.File
 	c.BindJSON(&files)
 	err := dc.FilesService.MoveFilesToMovies(files)

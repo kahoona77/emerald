@@ -62,5 +62,9 @@ func main() {
 	addr := fmt.Sprintf(":%d", conf.Port)
 	log.Printf("Emerald started port %v\n", addr)
 	fmt.Printf("Emerald started port %v\n", addr)
-	router.Run(addr)
+	err = router.Run(addr)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 }

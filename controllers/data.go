@@ -16,8 +16,21 @@ type DataController struct {
 	Config      *models.AppConfig        `inject:""`
 }
 
+// ConfigureRoutes configures the routes for this controller
+func (dc *DataController) ConfigureRoutes(route *gin.RouterGroup) {
+	route.POST("saveServer", dc.saveServer)
+	route.POST("deleteServer", dc.deleteServer)
+	route.GET("loadServers", dc.loadServers)
+	route.GET("loadSettings", dc.loadSettings)
+	route.POST("saveSettings", dc.saveSettings)
+	route.GET("findPackets", dc.findPackets)
+	route.GET("countPackets", dc.countPackets)
+	route.GET("loadLogFile", dc.loadLogFile)
+	route.GET("clearLogFile", dc.clearLogFile)
+}
+
 // SaveServer saves a server
-func (dc *DataController) SaveServer(c *gin.Context) {
+func (dc *DataController) saveServer(c *gin.Context) {
 	var server models.Server
 	c.BindJSON(&server)
 
@@ -30,7 +43,7 @@ func (dc *DataController) SaveServer(c *gin.Context) {
 }
 
 //DeleteServer deletes a server
-func (dc *DataController) DeleteServer(c *gin.Context) {
+func (dc *DataController) deleteServer(c *gin.Context) {
 	var server models.Server
 	c.BindJSON(&server)
 
@@ -43,19 +56,19 @@ func (dc *DataController) DeleteServer(c *gin.Context) {
 }
 
 //LoadServers loads all servers
-func (dc *DataController) LoadServers(c *gin.Context) {
+func (dc *DataController) loadServers(c *gin.Context) {
 	servers, _ := dc.DataService.FindAllServers()
 	renderOk(c, servers)
 }
 
 //LoadSettings loads the settings
-func (dc *DataController) LoadSettings(c *gin.Context) {
+func (dc *DataController) loadSettings(c *gin.Context) {
 	settings := dc.DataService.LoadSettings()
 	renderOk(c, settings)
 }
 
 //SaveSettings saves the settings
-func (dc *DataController) SaveSettings(c *gin.Context) {
+func (dc *DataController) saveSettings(c *gin.Context) {
 	var settings models.EmeraldSettings
 	c.BindJSON(&settings)
 
@@ -65,7 +78,7 @@ func (dc *DataController) SaveSettings(c *gin.Context) {
 }
 
 //FindPackets finds DCC packets
-func (dc *DataController) FindPackets(c *gin.Context) {
+func (dc *DataController) findPackets(c *gin.Context) {
 	var query = c.Query("query")
 	packtes, err := dc.DataService.FindPackets(query)
 	if err != nil {
@@ -75,7 +88,7 @@ func (dc *DataController) FindPackets(c *gin.Context) {
 }
 
 //CountPackets counts alls packest in the DB - first delets old packets
-func (dc *DataController) CountPackets(c *gin.Context) {
+func (dc *DataController) countPackets(c *gin.Context) {
 	dc.DataService.DeleteOldPackets()
 
 	packetCount, _ := dc.DataService.CountPackets()
@@ -83,14 +96,14 @@ func (dc *DataController) CountPackets(c *gin.Context) {
 }
 
 //LoadLogFile loads the logFile from Disk
-func (dc *DataController) LoadLogFile(c *gin.Context) {
+func (dc *DataController) loadLogFile(c *gin.Context) {
 	logFile := dc.Config.LogFile
 	buf, _ := ioutil.ReadFile(logFile)
 	renderOk(c, string(buf))
 }
 
 //ClearLogFile clears the logFile
-func (dc *DataController) ClearLogFile(c *gin.Context) {
+func (dc *DataController) clearLogFile(c *gin.Context) {
 	logFile := dc.Config.LogFile
 	ioutil.WriteFile(logFile, []byte(""), 0644)
 	OK(c)

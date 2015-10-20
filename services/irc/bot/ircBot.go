@@ -2,9 +2,12 @@ package bot
 
 import (
 	"log"
+	"net"
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/efarrer/iothrottler"
 	irc "github.com/fluffle/goirc/client"
@@ -19,12 +22,14 @@ type IrcBot struct {
 	connPool    *iothrottler.IOThrottlerPool
 	dataService *dataService.DataService
 
-	conn       *irc.Conn
-	consoleLog []string
-	regex      *regexp.Regexp
-	logCount   int
-	resumes    map[string]*models.DccFileEvent
-	pending    map[string]*models.Download
+	conn             *irc.Conn
+	consoleLog       []string
+	regex            *regexp.Regexp
+	logCount         int
+	resumes          map[string]*models.DccFileEvent
+	pending          map[string]*models.Download
+	connMu           sync.Mutex
+	reconnectAllowed bool
 }
 
 //NewIrcBot creates a new bot
@@ -57,15 +62,22 @@ func (ib *IrcBot) IsConnected() bool {
 
 // Connect connects the bot to its serve
 func (ib *IrcBot) Connect() {
+	ib.connMu.Lock()
+	defer ib.connMu.Unlock()
+
+	//reconnect
+	ib.reconnectAllowed = true
+
 	settings := ib.dataService.LoadSettings()
 	// create a config and fiddle with it first:
 	cfg := irc.NewConfig(settings.Nick)
-	cfg.Server = ib.server.Name + ":" + strconv.Itoa(ib.server.Port)
+	cfg.Timeout = 10 * time.Second
 	ib.conn = irc.Client(cfg)
 
 	// Join channels
 	ib.conn.HandleFunc("connected",
 		func(conn *irc.Conn, line *irc.Line) {
+			log.Printf("connected to " + ib.server.Name + ":" + strconv.Itoa(ib.server.Port))
 			ib.logToConsole("connected to " + ib.server.Name + ":" + strconv.Itoa(ib.server.Port))
 
 			for _, channel := range ib.server.Channels {
@@ -79,31 +91,54 @@ func (ib *IrcBot) Connect() {
 
 	ib.conn.HandleFunc("372", ib.log372)
 
-	ib.conn.HandleFunc("DISCONNECTED", ib.reconnect)
+	ib.conn.HandleFunc("DISCONNECTED", ib.handleDisconnect)
 
 	ib.conn.HandleFunc("CTCP", ib.handleDCC)
 
+	ib.conn.HandleFunc(irc.NOTICE, ib.handleNotice)
+
 	// Tell client to connect.
-	log.Printf("Connecting to '%v'", ib.server.Name)
-	if err := ib.conn.Connect(); err != nil {
-		log.Printf("Connection error: %v\n", err)
-		ib.logToConsole("Connection error: " + err.Error())
+	ips, err := net.LookupIP(ib.server.Name)
+	if err != nil {
+		log.Printf("Lookup error: %v\n", err)
+		ib.logToConsole("Lookup error: " + err.Error())
+	}
+
+	for _, ip := range ips {
+		server := ip.String() + ":" + strconv.Itoa(ib.server.Port)
+
+		log.Printf("Connecting to '%v'", server)
+		if err := ib.conn.ConnectTo(server); err != nil {
+			log.Printf("Connection error: %v\n", err)
+			ib.logToConsole("Connection error: " + err.Error())
+		} else {
+			break
+		}
 	}
 }
 
 // Disconnect disconnects the bot from its server. Currently NOOP
 func (ib *IrcBot) Disconnect() {
-	// TODO
-	//ib.conn.shutdown()
+	log.Printf("Discconecting from '%v'.", ib.server.Name)
+	ib.reconnectAllowed = false
+	ib.conn.Quit()
 }
 
-func (ib *IrcBot) reconnect(conn *irc.Conn, line *irc.Line) {
-	log.Printf("Discconected from '%v'. Reconnecting now ...", ib.server.Name)
-	ib.Connect()
+func (ib *IrcBot) handleDisconnect(conn *irc.Conn, line *irc.Line) {
+	log.Printf("Discconected from '%v'.", ib.server.Name)
+	if ib.reconnectAllowed {
+		log.Printf(" --> Reconnecting now ...")
+		ib.Connect()
+	}
 }
 
 func (ib *IrcBot) log372(conn *irc.Conn, line *irc.Line) {
 	ib.logToConsole(line.Text())
+}
+
+func (ib *IrcBot) handleNotice(conn *irc.Conn, line *irc.Line) {
+	log.Printf("[NOTICE] %v", line.Text())
+	ib.logToConsole("[NOTICE] " + line.Text())
 }
 
 func (ib *IrcBot) parseMessage(conn *irc.Conn, line *irc.Line) {

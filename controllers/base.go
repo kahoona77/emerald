@@ -6,6 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//Controller bas interface for controllers
+type Controller interface {
+	ConfigureRoutes(route *gin.RouterGroup)
+}
+
 type Result struct {
 	Success bool        `json:"success"`
 	Message string      `json:"message"`
