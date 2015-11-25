@@ -163,7 +163,7 @@ func (ib *IrcBot) parsePacket(conn *irc.Conn, line *irc.Line) *models.Packet {
 }
 
 func cleanFileName(filename string) string {
-	return strings.Trim(filename, "\u263B\u263C\u0002\u000f ")
+	return strings.Trim(filename, "\u263B\u263C\u0002\u000f\u0016\u001f ")
 }
 
 func (ib *IrcBot) logToConsole(msg string) {
@@ -186,6 +186,8 @@ func (ib *IrcBot) StartDownload(download *models.Download) {
 
 	//add to pending list
 	ib.pending[download.File] = download
+
+	log.Printf("Adding file '%v' to pending list ", download.File)
 
 	msg := "xdcc send " + getCleanPacketID(download)
 	ib.conn.Privmsg(download.Bot, msg)
