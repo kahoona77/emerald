@@ -46,3 +46,9 @@ type Download struct {
 	Remaining     int64     `json:"remaining"`
 	LastUpdate    time.Time `json:"-"`
 }
+
+//Download represent a Download in Emerald
+type DirectDownload struct {
+	Server  string `json:"server"`
+	Message string `json:"message"`
+}

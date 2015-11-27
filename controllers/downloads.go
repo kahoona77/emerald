@@ -18,6 +18,7 @@ type DownloadsController struct {
 // ConfigureRoutes configures the routes for this controller
 func (dc *DownloadsController) ConfigureRoutes(route *gin.RouterGroup) {
 	route.POST("downloadPacket", dc.downloadPacket)
+	route.POST("startDirectDownload", dc.startDirectDownload)
 	route.GET("listDownloads", dc.listDownloads)
 	route.POST("stopDownload", dc.stopDownload)
 	route.POST("cancelDownload", dc.cancelDownload)
@@ -32,6 +33,15 @@ func (dc *DownloadsController) downloadPacket(c *gin.Context) {
 	var packet models.Packet
 	c.BindJSON(&packet)
 	dc.IrcClient.DownloadPacket(&packet)
+	OK(c)
+}
+
+//DownloadPacket starts the download of a packet
+func (dc *DownloadsController) startDirectDownload(c *gin.Context) {
+	var download models.DirectDownload
+	c.BindJSON(&download)
+
+	dc.IrcClient.AddDirectDownload(&download)
 	OK(c)
 }
 

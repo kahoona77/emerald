@@ -1,4 +1,4 @@
-package bot
+package irc
 
 import (
 	"bufio"
@@ -8,6 +8,7 @@ import (
 	"net"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/kahoona77/emerald/models"
 )
@@ -16,12 +17,15 @@ func (ib *IrcBot) startDownload(fileEvent *models.DccFileEvent, startPos int64, 
 	//check if the file is in the queue
 	download := ib.pending[fileEvent.FileName]
 	if download == nil {
-		log.Printf("Could not find download-file '%v' in pending list ", fileEvent.FileName)
-		return
-	}
+		log.Printf("Could not find download-file '%v' in pending list. Adding as new Download ", fileEvent.FileName)
 
-	//remove from pending list
-	delete(ib.pending, fileEvent.FileName)
+		download = &models.Download{ID: fileEvent.FileName, Status: "WAITING", File: fileEvent.FileName, Server: ib.server.Name, LastUpdate: time.Now()}
+		ib.client.AddNewDownload(download)
+
+	} else {
+		//remove from pending list
+		delete(ib.pending, fileEvent.FileName)
+	}
 
 	file := getTempFile(fileEvent, settings)
 

@@ -16,12 +16,28 @@ func DownloadFromPacket(packet *models.Packet) *models.Download {
 	return &d
 }
 
-//DownloadPacket starts teh Download of a Packet
+//DownloadPacket starts the Download of a Packet
 func (ic *Client) DownloadPacket(packet *models.Packet) {
 	bot := ic.GetBot(packet.Server)
 	download := DownloadFromPacket(packet)
 	ic.downloads[download.ID] = download
 	bot.StartDownload(download)
+}
+
+//AddDirectDownload starts a DirectDownload
+func (ic *Client) AddDirectDownload(download *models.DirectDownload) {
+	bot := ic.GetBot(download.Server)
+	bot.StartDirectDownload(download)
+}
+
+//AddNewDownload add a new Download to the list
+func (ic *Client) AddNewDownload(download *models.Download) {
+	existingDL := ic.downloads[download.ID]
+	if existingDL == nil {
+		ic.downloads[download.ID] = download
+	} else {
+		log.Printf("Received new Dowload '%v' that already existed", download.ID)
+	}
 }
 
 //ListDownloads returs an array of all Downloads

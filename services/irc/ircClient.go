@@ -6,7 +6,6 @@ import (
 	"github.com/efarrer/iothrottler"
 	"github.com/kahoona77/emerald/models"
 	"github.com/kahoona77/emerald/services/dataService"
-	"github.com/kahoona77/emerald/services/irc/bot"
 	"github.com/kahoona77/emerald/services/showsService"
 )
 
@@ -15,7 +14,7 @@ type Client struct {
 	DataService  *dataService.DataService   `inject:""`
 	ShowsService *showsService.ShowsService `inject:""`
 
-	bots       map[string]*bot.IrcBot
+	bots       map[string]*IrcBot
 	downloads  map[string]*models.Download
 	updateChan chan models.DccUpdate
 	connPool   *iothrottler.IOThrottlerPool
@@ -24,7 +23,7 @@ type Client struct {
 // NewClient creates a new client
 func NewClient() *Client {
 	client := new(Client)
-	client.bots = make(map[string]*bot.IrcBot)
+	client.bots = make(map[string]*IrcBot)
 	client.downloads = make(map[string]*models.Download)
 	client.updateChan = make(chan models.DccUpdate)
 	client.connPool = iothrottler.NewIOThrottlerPool(iothrottler.Unlimited)
@@ -58,15 +57,15 @@ func (ic *Client) GetServerConsole(server *models.Server) string {
 }
 
 // GetBot return the Bot of the given serverName
-func (ic *Client) GetBot(serverName string) *bot.IrcBot {
+func (ic *Client) GetBot(serverName string) *IrcBot {
 	return ic.bots[serverName]
 }
 
-func (ic *Client) getAndUpdateBot(server *models.Server) *bot.IrcBot {
+func (ic *Client) getAndUpdateBot(server *models.Server) *IrcBot {
 	currentBot := ic.bots[server.Name]
 	if currentBot == nil {
 		// create new bot
-		currentBot = bot.NewIrcBot(server, ic.updateChan, ic.connPool, ic.DataService)
+		currentBot = NewIrcBot(ic, server, ic.updateChan, ic.connPool, ic.DataService)
 		ic.bots[server.Name] = currentBot
 	} else {
 		//update bot

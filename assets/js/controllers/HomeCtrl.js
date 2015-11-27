@@ -153,4 +153,25 @@ angular.module('emerald.controllers').
         }
       });
     };
+
+
+    $scope.showAddDownloadDialog = function (server) {
+      $scope.newDownload = {
+        message: '',
+        server: server.name
+      };
+      $('#addDownloadDialog').modal ('show');
+    };
+
+    $scope.addDownload = function (newDownload) {
+      $http.post ('downloads/startDirectDownload', newDownload).success (function (response) {
+        if (response.success) {
+          $scope.selectedServerConsole = response.data;
+        } else {
+          msg.error (response.message);
+        }
+      });
+      $('#addDownloadDialog').modal ('hide');
+    }
+
   }]);

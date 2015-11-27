@@ -1,4 +1,4 @@
-package bot
+package irc
 
 import (
 	"log"
@@ -17,6 +17,7 @@ import (
 
 // IrcBot can connect to a specific server
 type IrcBot struct {
+	client      *Client
 	server      *models.Server
 	updateChan  chan models.DccUpdate
 	connPool    *iothrottler.IOThrottlerPool
@@ -33,8 +34,9 @@ type IrcBot struct {
 }
 
 //NewIrcBot creates a new bot
-func NewIrcBot(server *models.Server, updateChan chan models.DccUpdate, pool *iothrottler.IOThrottlerPool, dataService *dataService.DataService) *IrcBot {
+func NewIrcBot(client *Client, server *models.Server, updateChan chan models.DccUpdate, pool *iothrottler.IOThrottlerPool, dataService *dataService.DataService) *IrcBot {
 	bot := new(IrcBot)
+	bot.client = client
 	bot.server = server
 	bot.updateChan = updateChan
 	bot.connPool = pool
@@ -48,6 +50,7 @@ func NewIrcBot(server *models.Server, updateChan chan models.DccUpdate, pool *io
 	return bot
 }
 
+//SetServer set the server
 func (ib *IrcBot) SetServer(server *models.Server) {
 	ib.server = server
 }
@@ -187,10 +190,20 @@ func (ib *IrcBot) StartDownload(download *models.Download) {
 	//add to pending list
 	ib.pending[download.File] = download
 
-	log.Printf("Adding file '%v' to pending list ", download.File)
-
 	msg := "xdcc send " + getCleanPacketID(download)
 	ib.conn.Privmsg(download.Bot, msg)
+}
+
+// StartDirectDownload starts the given DirectDownload
+func (ib *IrcBot) StartDirectDownload(download *models.DirectDownload) {
+	ib.logToConsole("Starting Direct Download: " + download.Message)
+	bot := download.Message[strings.Index(download.Message, "/msg")+5 : len(download.Message)]
+	bot = bot[:strings.Index(bot, " xdcc send")]
+
+	packet := download.Message[strings.Index(download.Message, "#"):len(download.Message)]
+
+	msg := "xdcc send " + packet
+	ib.conn.Privmsg(bot, msg)
 }
 
 //StopDownload stops the given download
