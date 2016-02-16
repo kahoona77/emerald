@@ -21,5 +21,6 @@ import:
   - package: github.com/garfunkel/go-tvdb
   - package: code.google.com/p/gcfg
   - package: github.com/gin-gonic/gin
+  - package: gopkg.in/go-playground/validator.v8
   - package: github.com/robfig/cron
   - package: github.com/fluffle/goirc
