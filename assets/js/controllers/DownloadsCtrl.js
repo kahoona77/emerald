@@ -148,7 +148,7 @@ angular.module('emerald.controllers').
     };
 
     $scope.updateEpisodes = function () {
-     $http.get('/shows/updateEpisodes').success(function(response){
+     $http.get('shows/updateEpisodes').success(function(response){
         if (response.success) {
           msg.show ("Updating episodes started...");
         } else {

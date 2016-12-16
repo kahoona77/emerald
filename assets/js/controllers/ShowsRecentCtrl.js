@@ -6,7 +6,7 @@ angular.module('emerald.controllers').
   controller('ShowsRecentCtrl', ['$scope', 'msg', '$http', '$location', '$filter', function($scope, msg, $http, $location, $filter) {
 
     $scope.loadRecent = function () {
-      $http.get('/shows/recentEpisodes', {params : {duration: 7}}).success(function(response){
+      $http.get('shows/recentEpisodes', {params : {duration: 7}}).success(function(response){
          if (response.success) {
            $scope.episodes = response.data;
          } else {

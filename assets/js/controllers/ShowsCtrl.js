@@ -6,7 +6,7 @@ angular.module('emerald.controllers').
   controller('ShowsCtrl', ['$scope', 'msg', '$http', '$location', function($scope, msg, $http, $location) {
 
     $scope.loadShows = function () {
-      $http.get('/shows/load').success(function(response){
+      $http.get('shows/load').success(function(response){
         if (response.success) {
           $scope.shows = response.data;
 
@@ -28,7 +28,7 @@ angular.module('emerald.controllers').
     //search
     $scope.searchShow = function () {
 
-      $http.get('/shows/search', {params : {query: $scope.query}}).success(function(response){
+      $http.get('shows/search', {params : {query: $scope.query}}).success(function(response){
         if (response.success) {
           $scope.searchResults = response.data;
         } else {
@@ -48,7 +48,7 @@ angular.module('emerald.controllers').
     };
 
     $scope.saveShow = function (show) {
-      $http.post ('/shows/save', show).success (function (response) {
+      $http.post ('shows/save', show).success (function (response) {
         if (response.status = 'ok') {
           $('#addShowDialog').modal('hide');
           $scope.query = undefined;
@@ -79,7 +79,7 @@ angular.module('emerald.controllers').
     };
 
     $scope.loadEpisodes = function (show) {
-     $http.get('/shows/loadEpisodes', {params : {showId: show.id}}).success(function(response){
+     $http.get('shows/loadEpisodes', {params : {showId: show.id}}).success(function(response){
         if (response.success) {
           var result = [];
           angular.forEach(response.data, function(value, key) {
@@ -107,7 +107,7 @@ angular.module('emerald.controllers').
     };
 
     $scope.updateEpisodes = function () {
-     $http.get('/shows/updateEpisodes').success(function(response){
+     $http.get('shows/updateEpisodes').success(function(response){
         if (response.status == 'ok') {
           msg.error ("Updating episodes started...");
         } else {
